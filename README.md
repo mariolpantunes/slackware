@@ -1,5 +1,8 @@
-h1. Slackware stuff
+# Slackware stuff
 
-h2. About
+## About
 
 Repository for slackbuilds, scripts and everything related to Slackware.
+
+## Author
+Mário Antunes (mariolpantunes@gmail.com)
