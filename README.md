@@ -1,4 +1,5 @@
-slackware
-=========
+h1. Slackware stuff
 
-Repository for slackbuilds, scripts and everything related to Slackware
+h2. About
+
+Repository for slackbuilds, scripts and everything related to Slackware.
