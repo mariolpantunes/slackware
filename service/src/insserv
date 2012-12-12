@@ -1,0 +1,76 @@
+#!/bin/bash
+
+PRG=`basename $0`
+SERVICE_DIRECTORY="/etc/rc.d"
+RC_LOCAL_PATH=$SERVICE_DIRECTORY"/rc.local"
+RC_LOCAL_SHUTDOWN_PATH=$SERVICE_DIRECTORY"/rc.local_shutdown"
+PREFIX="rc."
+N_ARGS=1
+
+### Error codes based on linux error codes
+ERROR_BAD_ARGS=22
+ERROR_SERVICE_NOT_FOUND=2
+ERROR_SERVICE_NOT_EXECUTABLE=1
+
+if [[ $# -ne $N_ARGS ]]; then
+    echo -e "Usage: $PRG \"service name\""
+    exit $ERROR_BAD_ARGS
+fi
+
+if [ ! -f $1 ]; then
+    echo -e "File not found: $1"
+    exit $ERROR_SERVICE_NOT_FOUND
+fi
+
+SERVICE_NAME="$(basename "$1")"
+SERVICE_PATH="$(cd "$( dirname "$1" )" && pwd )"
+
+if [[ $SERVICE_PATH == $SERVICE_DIRECTORY ]]; then
+    echo -e "Service already in the correct folder: \e[00;32mYES\e[00m"
+    LINK=$SERVICE_PATH"/"$SERVICE_NAME 
+else
+    echo -e "Service already in the correct folder: \e[00;31mNO\e[00m"
+    echo $SERVICE_NAME | grep '^rc.'
+    if [[ $? -eq 0 ]]; then
+        LINK=$SERVICE_DIRECTORY"/"$SERVICE_NAME
+    else
+        LINK=$SERVICE_DIRECTORY"/"$PREFIX$SERVICE_NAME
+    fi
+    echo -e "Creating a symbolic link: $LINK"
+    echo -e "Service Path: $SERVICE_PATH"
+    echo -e "Service Name: $SERVICE_NAME"    
+    ln -fs $SERVICE_PATH"/"$SERVICE_NAME $LINK
+fi
+
+START_COMMENT="#Start service $SERVICE_NAME"
+START_COMMAND="if [ -x $LINK ]; then\n\techo \"Start service $SERVICE_NAME\"\n\t$LINK start\nfi"
+STOP_COMMENT="#Stop service $SERVICE_NAME"
+STOP_COMMAND="if [ -x $LINK ]; then\n\techo \"Stop service $SERVICE_NAME\"\n\t$LINK stop\nfi"
+
+if [ ! -f "$RC_LOCAL_PATH" ]; then
+    echo -e "#!/bin/bash" > $RC_LOCAL_PATH
+    chmod +x $RC_LOCAL_PATH
+fi
+
+RC_LOCAL=`cat $RC_LOCAL_PATH`
+echo "$RC_LOCAL" | grep "$START_COMMENT"
+if [[ $? -eq 0 ]]; then
+    echo -e "Start command in rc.local: \e[00;32mYES\e[00m"
+else
+    echo -e "Start command in rc.local: \e[00;31mNO\e[00m"
+    echo -e "\n$START_COMMENT\n$START_COMMAND" >> $RC_LOCAL_PATH
+fi
+
+if [ ! -f "$RC_LOCAL_SHUTDOWN_PATH" ]; then
+    echo -e "#!/bin/bash" > $RC_LOCAL_SHUTDOWN_PATH
+    chmod +x $RC_LOCAL_SHUTDOWN_PATH
+fi
+
+RC_LOCAL_SHUTDOWN=`cat $RC_LOCAL_SHUTDOWN_PATH`
+echo "$RC_LOCAL_SHUTDOWN" | grep "$STOP_COMMENT"
+if [[ $? -eq 0 ]]; then
+    echo -e "Stop command in rc.local_shutdown: \e[00;32mYES\e[00m"
+else
+    echo -e "Stop command in rc.local_shutdown: \e[00;31mNO\e[00m"
+    echo -e "\n$STOP_COMMENT\n$STOP_COMMAND" >> $RC_LOCAL_SHUTDOWN_PATH
+fi
