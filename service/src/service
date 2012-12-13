@@ -28,14 +28,14 @@ if [ -e "$SERVICE_DIRECTORY$1" ]; then
 elif [ -e "$SERVICE_DIRECTORY$PREFIX$1" ]; then
     SERVICE="$SERVICE_DIRECTORY$PREFIX$1"
 else
-    echo "Service not found"
+    echo "Service $1 not found"
     exit $ERROR_SERVICE_NOT_FOUND
 fi
 
 if [ -x $SERVICE ]; then
     SERVICE="$SERVICE $ARGS"
 else
-    echo "Service not executable"
+    echo "Service $1 not executable"
     exit $ERROR_SERVICE_NOT_EXECUTABLE
 fi
 
