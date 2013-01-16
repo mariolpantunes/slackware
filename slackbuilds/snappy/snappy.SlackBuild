@@ -60,6 +60,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --mandir=/usr/man \
   --sysconfdir=/etc \
   --disable-static \
+  --enable-shared \
   --disable-gtest \
   --localstatedir=/var
 
@@ -71,8 +72,8 @@ find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | \
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a README $PKG/usr/doc/$PRGNAM-$VERSION
-find $PKG/usr/doc/$PRGNAM-$VERSION -type f -exec chmod 644 {} \;
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+find $PKG/usr/doc/$PRGNAM-$VERSION -type f -exec chmod 644 {} \;
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
