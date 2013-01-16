@@ -26,18 +26,10 @@
 # This script is just a binary repackaging.
 
 PRGNAM=JabRef
-VERSION=2.8.1
+VERSION=2.9.2
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
-
-if [ -z "$ARCH" ]; then
-  case "$( uname -m )" in
-    i?86) ARCH=i586 ;;
-    arm*) ARCH=arm ;;
-       *) ARCH=$( uname -m ) ;;
-  esac
-fi
-
+ARCH=${ARCH:-noarch}
 CWD=$(pwd)
 TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
@@ -46,48 +38,26 @@ OUTPUT=${OUTPUT:-/tmp}
 set -e
 
 rm -rf $PKG
-mkdir -p $TMP $PKG/opt $OUTPUT
-cd $PKG/opt
+mkdir -p $TMP $PKG/opt/$PRGNAM $OUTPUT
+install -D -m 0644 $CWD/$PRGNAM-$VERSION.jar $PKG/opt/$PRGNAM/$PRGNAM-$VERSION.jar
 
-tar xvf $CWD/$PRGNAM-$VERSION-src.tar.bz2
-
-chown -R root:root .
-find . \
- \( -perm 777 -o -perm 775 -o -perm 711 -o -perm 555 -o -perm 511 \) \
- -exec chmod 755 {} \; -o \
- \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
- -exec chmod 644 {} \;
-
-# Add a wrapper to run eclipse in /usr/bin
-# Its going to change the working directory to $HOME, so when you import/export
-# into/from eclipse $HOME is going to be the default directory, rather than
-# /opt/eclipse.
 mkdir -p $PKG/usr/bin
 cat << EOF > $PKG/usr/bin/$PRGNAM
-#!/bin/sh
+#!/bin/bash
 cd \$HOME
-/opt/eclipse/eclipse \$@
+java -jar /opt/$PRGNAM/$PRGNAM-$VERSION.jar \$@
 EOF
-chmod 0755 $PKG/usr/bin/eclipse
+chmod 0755 $PKG/usr/bin/$PRGNAM
 
-# Add eclipse to KDE/GNOME/XFCE menu and install an icon for them
-install -D -m 0644 $CWD/$PRGNAM.desktop \
-  $PKG/usr/share/applications/$PRGNAM.desktop
-install -D -m 0644 $CWD/$PRGNAM.png \
-  $PKG/usr/share/pixmaps/$PRGNAM.png
+cd $PKG/opt/$PRGNAM
+
+install -D -m 0644 $CWD/$PRGNAM.desktop $PKG/usr/share/applications/$PRGNAM.desktop
+install -D -m 0644 $CWD/$PRGNAM.png $PKG/usr/share/pixmaps/$PRGNAM.png
 
 find $PKG | xargs file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
-# Don't clobber any existing config file
-mv $PKG/opt/$PRGNAM/configuration/config.ini \
-   $PKG/opt/$PRGNAM/configuration/config.ini.new
-mv $PKG/opt/$PRGNAM/eclipse.ini \
-   $PKG/opt/$PRGNAM/eclipse.ini.new
-
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cd $PKG/opt/$PRGNAM
-cp -a about_files readme *.html $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install
