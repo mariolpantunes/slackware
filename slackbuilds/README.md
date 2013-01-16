@@ -10,5 +10,5 @@ But until the slackbuilds are accepted they are available through this repositor
 2. [Leveldb 1.9] (http://code.google.com/p/leveldb/)
 3. [Snappy 1.0.5] (http://code.google.com/p/snappy/)
 4. [ZeroMQ-JZMQ] (https://github.com/zeromq/jzmq)
-5. [Jabref] (http://jabref.sourceforge.net/)
+5. [Jabref 2.9.2] (http://jabref.sourceforge.net/)
 6. [JSONObject 1.0] (https://github.com/mariolpantunes/json)
