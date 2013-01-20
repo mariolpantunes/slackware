@@ -5,7 +5,7 @@
 
 PRGNAM=openfire
 VERSION=${VERSION:-3_7_1}
-BUILD=${BUILD:-1}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_SBo}
 ARCH="noarch"
 CWD=$(pwd)
