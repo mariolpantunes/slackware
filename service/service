@@ -1,0 +1,43 @@
+#!/bin/bash
+
+PRG=`basename $0`
+SERVICE_DIRECTORY="/etc/rc.d/"
+PREFIX="rc."
+N_ARGS=1
+
+### Error codes based on linux error codes
+ERROR_BAD_ARGS=22
+ERROR_SERVICE_NOT_FOUND=2
+ERROR_SERVICE_NOT_EXECUTABLE=1
+
+if [[ $# < $N_ARGS ]]; then
+    echo "Usage: $PRG \"service name\" \"service args\""
+    exit $ERROR_BAD_ARGS
+fi
+
+ARRAY=("$@")
+ARGS=""
+
+for (( i=1; i<$#; ++i))
+do
+    ARGS="$ARGS ${ARRAY[$i]}" 
+done
+
+if [ -e "$SERVICE_DIRECTORY$1" ]; then
+    SERVICE="$SERVICE_DIRECTORY$1"
+elif [ -e "$SERVICE_DIRECTORY$PREFIX$1" ]; then
+    SERVICE="$SERVICE_DIRECTORY$PREFIX$1"
+else
+    echo "Service $1 not found"
+    exit $ERROR_SERVICE_NOT_FOUND
+fi
+
+if [ -x $SERVICE ]; then
+    SERVICE="$SERVICE $ARGS"
+else
+    echo "Service $1 not executable"
+    exit $ERROR_SERVICE_NOT_EXECUTABLE
+fi
+
+cd $SERVICE_DIRECTORY
+exec $SERVICE
