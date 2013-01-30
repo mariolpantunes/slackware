@@ -1,0 +1,20 @@
+_slack_service()
+{
+	local cur prev opts
+	COMPREPLY=()
+	cur="${COMP_WORDS[COMP_CWORD]}"
+	prev="${COMP_WORDS[COMP_CWORD-1]}"
+	opts=""
+	for i in `find /etc/rc.d/ -maxdepth 1 -executable -type f`
+	do
+		var=${i:13}
+		len=${#var}
+		if [[ ${len} -gt 1 ]];then
+			opts="$opts $var"
+		fi
+	done
+	COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+        return 0
+}
+
+complete -F _slack_service service
