@@ -1,12 +1,50 @@
 #!/bin/bash
 
-#depmod -a
-#modprobe acpiphp
+TIMEOUT=10
+LINK="http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key"
 
-# simple attempt to get the user ssh key using the meta-data service
-mkdir -p /root/.ssh
-curl -m 10 -s http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key | grep 'ssh-rsa' > /root/.ssh/authorized_keys
-echo "AUTHORIZED_KEYS:"
-echo "************************"
-cat /root/.ssh/authorized_keys
-echo "************************"
+function importKeys()
+{
+    if [ ! -f "/root/.ssh" ];then
+        mkdir -p "/root/.ssh"
+    fi
+
+    curl -m $TIMEOUT -s $LINK | grep "ssh-rsa|ssh-dsa" > /root/.ssh/authorized_keys
+    echo "AUTHORIZED_KEYS:"
+    echo "************************"
+    cat /root/.ssh/authorized_keys
+    echo "************************"
+}
+
+
+### Start function
+#
+function start() {
+    importKeys
+}
+
+### Stop function
+#
+function stop() {
+    rm /root/.ssh/authorized_keys
+}
+
+case "$1" in
+start)
+    start
+    ;;
+stop)
+    stop
+    ;;
+restart)
+    stop
+    sleep 1
+    start
+    ;;
+*)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+    ;;
+esac
+
+exit 0
