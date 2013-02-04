@@ -1,9 +1,10 @@
+SERVICE_DIRECTORY="/etc/rc.d/"
 _slack_service()
 {
     local cur
     cur=${COMP_WORDS[COMP_CWORD]}
     opts=""
-    for i in `find /etc/rc.d/ -maxdepth 1 -executable -type f`
+    for i in `find $SERVICE_DIRECTORY -maxdepth 1 -executable -type f`
     do
         var=${i:13}
         len=${#var}
@@ -19,3 +20,4 @@ _slack_service()
 }
 
 complete -F _slack_service service
+complete -F _file insserv
