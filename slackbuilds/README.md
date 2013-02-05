@@ -13,3 +13,4 @@ But until the slackbuilds are accepted they are available through this repositor
 5. [Jabref 2.9.2] (http://jabref.sourceforge.net/)
 6. [JSONObject 1.0] (https://github.com/mariolpantunes/json)
 7. [Service 1.0] ()
+8. [Rc.cloud] ()
