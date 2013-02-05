@@ -2,14 +2,15 @@
 
 TIMEOUT=10
 LINK="http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key"
+EXP="\(ssh-rsa\|ssh-dsa\)"
 
-function importKeys()
+function importSSHKeys()
 {
     if [ ! -f "/root/.ssh" ];then
         mkdir -p "/root/.ssh"
     fi
 
-    curl -m $TIMEOUT -s $LINK | grep "ssh-rsa|ssh-dsa" > /root/.ssh/authorized_keys
+    curl -m $TIMEOUT -s $LINK | grep $EXP > /root/.ssh/authorized_keys
     echo "AUTHORIZED_KEYS:"
     echo "************************"
     cat /root/.ssh/authorized_keys
@@ -20,7 +21,7 @@ function importKeys()
 ### Start function
 #
 function start() {
-    importKeys
+    importSSHKeys
 }
 
 ### Stop function
