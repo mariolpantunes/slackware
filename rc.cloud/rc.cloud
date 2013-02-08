@@ -8,9 +8,11 @@ function importSSHKeys()
 {
     if [ ! -f "/root/.ssh" ];then
         mkdir -p "/root/.ssh"
+        chmod 0700 "/root/.ssh"
     fi
 
-    curl -m $TIMEOUT -s $LINK | grep $EXP > /root/.ssh/authorized_keys
+    curl -m $TIMEOUT -s $LINK | grep $EXP > "/root/.ssh/authorized_keys"
+    chmod 0600 "/root/.ssh/authorized_keys"
     echo "AUTHORIZED_KEYS:"
     echo "************************"
     cat /root/.ssh/authorized_keys
