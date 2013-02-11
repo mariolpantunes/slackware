@@ -4,8 +4,8 @@
 # Written by Mário Antunes (mario.antunes@av.it.pt)
 
 PRGNAM=openfire
-VERSION=${VERSION:-3_7_1}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-3_8_0}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 ARCH="noarch"
 CWD=$(pwd)
@@ -30,8 +30,8 @@ find . \
  -exec chmod 644 {} \;
 
 mkdir -p $PKG/opt/openfire/
-cp -a bin/ $PKG/opt/openfire/
 cp -a .install4j/ $PKG/opt/openfire/
+cp -a bin/ $PKG/opt/openfire/
 cp -a conf/ $PKG/opt/openfire/
 cp -a lib/ $PKG/opt/openfire/
 cp -a logs/ $PKG/opt/openfire/
@@ -46,10 +46,10 @@ cd $TMP/$PRGNAM
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | \
  grep ELF | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
-mkdir -p $PKG/usr/doc/$PRGNAM\_$VERSION
-cp -a *.html documentation/ $PKG/usr/doc/$PRGNAM\_$VERSION
-cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM\_$VERSION/$PRGNAM.SlackBuild
-find $PKG/usr/doc/$PRGNAM-$VERSION -type f -exec chmod 644 {} \;
+mkdir -p $PKG/usr/doc/$PRGNAM
+cp -a *.html documentation/ $PKG/usr/doc/$PRGNAM
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM/$PRGNAM.SlackBuild
+find $PKG/usr/doc/$PRGNAM -type f -exec chmod 644 {} \;
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
