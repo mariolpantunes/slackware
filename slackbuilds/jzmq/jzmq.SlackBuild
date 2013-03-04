@@ -3,22 +3,10 @@
 # Slackware build script for Zeromq-jzmq
 # Written by Mário Antunes (mario.antunes@av.it.pt)
 
-PRGNAM=jzmq
-VERSION=${VERSION:-$(echo jzmq-*.zip | rev | cut -f 2 -d . | rev | cut -d '-' -f 2)}
+PRGNAM="jzmq"
+VERSION=${VERSION:-$(echo $PRGNAM*.zip | rev |cut -f 2- -d '.' | rev | cut -d '-' -f 2)}
 BUILD=${BUILD:-"3"}
 TAG=${TAG:-"_SBo"}
-
-echo -e "Version: $VERSION"
-
-if [ -z "$ARCH" ]; then
-  case "$( uname -m )" in
-    i?86) ARCH=i486 ;;
-    arm*) ARCH=arm ;;
-       *) ARCH=$( uname -m ) ;;
-  esac
-fi
-
-
 CWD=$(pwd)
 TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
