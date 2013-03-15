@@ -27,13 +27,13 @@
 
 PRGNAM=JabRef
 VERSION=2.9.2
-BUILD=${BUILD:-1}
-TAG=${TAG:-_SBo}
-ARCH=${ARCH:-noarch}
+BUILD=${BUILD:-"1"}
+TAG=${TAG:-"_SBo"}
+ARCH=${ARCH:-"noarch"}
 CWD=$(pwd)
-TMP=${TMP:-/tmp/SBo}
+TMP=${TMP:-"/tmp/SBo"}
 PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp}
+OUTPUT=${OUTPUT:-"/tmp"}
 
 set -e
 
@@ -65,4 +65,4 @@ cat $CWD/slack-desc > $PKG/install/slack-desc
 cat $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
-/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-"tgz"}
