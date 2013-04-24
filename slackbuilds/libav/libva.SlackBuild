@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Slackware build script for openfire
+# Slackware build script for libva
 # Written by Mário Antunes (mariolpantunes@gmail.com)
 
 PRGNAM="libva"

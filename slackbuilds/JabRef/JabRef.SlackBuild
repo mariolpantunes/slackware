@@ -1,33 +1,12 @@
-#!/bin/sh
-
-# Slackware build script for eclipse 
-
-# Copyright (c) 2008-2010, Antonio Hernández Blas <hba.nihilismus@gmail.com>
-# All rights reserved.
+#!/bin/bash
 #
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-# 1.- Redistributions of source code must retain the above copyright
-#     notice, this list of conditions and the following disclaimer.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY
-# EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
-# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-# Update by: Andre Barboza <bmg.andre@gmail.com>
-
+# Slackware build script for JabRef
+# Written by Mário Antunes (mariolpantunes@gmail.com)
 # This script is just a binary repackaging.
 
 PRGNAM=JabRef
 VERSION=2.9.2
-BUILD=${BUILD:-"1"}
+BUILD=${BUILD:-"2"}
 TAG=${TAG:-"_SBo"}
 ARCH=${ARCH:-"noarch"}
 CWD=$(pwd)
@@ -41,13 +20,7 @@ rm -rf $PKG
 mkdir -p $TMP $PKG/opt/$PRGNAM $OUTPUT
 install -D -m 0644 $CWD/$PRGNAM-$VERSION.jar $PKG/opt/$PRGNAM/$PRGNAM-$VERSION.jar
 
-mkdir -p $PKG/usr/bin
-cat << EOF > $PKG/usr/bin/$PRGNAM
-#!/bin/bash
-cd \$HOME
-java -jar /opt/$PRGNAM/$PRGNAM-$VERSION.jar \$@
-EOF
-chmod 0755 $PKG/usr/bin/$PRGNAM
+install -D -m 0755 $CWD/$PRGNAM $PKG/usr/bin/$PRGNAM
 
 cd $PKG/opt/$PRGNAM
 
