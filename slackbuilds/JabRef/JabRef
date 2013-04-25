@@ -1,5 +1,4 @@
 #!/bin/bash
 PWD=$(pwd)
 cd $PWD
-FILE=$(readlink -f $1)
-java -jar /opt/JabRef/JabRef-2.9.2.jar "$FILE"
+java -jar /opt/JabRef/JabRef-2.9.2.jar "$@"
