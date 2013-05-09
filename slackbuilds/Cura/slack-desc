@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.  Line
+# up the first '|' above the ':' following the base package name, and the '|'
+# on the right side marks the last column you can put a character in.  You must
+# make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':'.
+
+    |-----handy-ruler------------------------------------------------------|
+Cura: Cura
+Cura:
+Cura: Cura is developed by Ultimaker to make 3D printing as easy and
+Cura: streamlined as possible. It includes everything you need to prepare a 
+Cura: 3D file for printing and to print it. Cura is fully preconfigured to
+Cura: work on the Ultimaker. Cura comes with a friendly setup program that
+Cura: help you install the latest firmware as well as calibrate your 
+Cura: printer. While it is developed to be used with the Ultimaker 3D 
+Cura: printer, it can be used with other RepRap based designs.
+Cura:
+Cura:
