@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=Cura
+Name=Cura
+GenericName=Cura
+Comment=Cura
+Icon=Cura
+StartupNotify=true
+Categories=Graphics;

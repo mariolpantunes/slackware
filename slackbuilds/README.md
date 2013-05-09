@@ -15,3 +15,4 @@ But until the slackbuilds are accepted they are available through this repositor
 7. [Rc.cloud] (https://github.com/mariolpantunes/slackware/tree/master/rc.cloud)
 8. [JZMQ] (https://github.com/zeromq/jzmq)
 9. [Libva] (http://www.freedesktop.org/wiki/Software/vaapi)
+10. [Cura] (http://daid.github.io/Cura/)
