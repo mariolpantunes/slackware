@@ -1,0 +1,2 @@
+X-Video Bitstream Acceleration (XvBA) is AMD’s video acceleration API for Linux.
+It allows Linux applications to take advantage of the UVD engine in AMD GPUs to accelerate video decoding.
