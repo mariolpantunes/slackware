@@ -1,0 +1,11 @@
+--- /src/xvba_dump.c
++++ /src/xvba_dump.c
+@@ -150,8 +150,6 @@
+         _(VAEncSequenceParameterBufferType);
+         _(VAEncPictureParameterBufferType);
+         _(VAEncSliceParameterBufferType);
+-        _(VAEncH264VUIBufferType);
+-        _(VAEncH264SEIBufferType);
+ #endif
+ #undef _
+     }
