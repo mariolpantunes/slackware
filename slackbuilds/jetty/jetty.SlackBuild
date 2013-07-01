@@ -3,8 +3,8 @@
 # Slackware build script for openfire
 # Written by Mário Antunes (mariolpantunes@gmail.com)
 
-PRGNAM="openfire"
-VERSION=${VERSION:-$(echo $PRGNAM*.tar.gz | rev | cut -f 3- -d '.' | rev | cut -d '_' -f 2-)}
+PRGNAM="jetty"
+VERSION=${VERSION:-$(echo $PRGNAM*.tar.* | rev | cut -f 3- -d '.' | rev | cut -d '-' -f 3-)}
 BUILD=${BUILD:-"1"}
 TAG=${TAG:-"_SBo"}
 ARCH="noarch"
@@ -19,9 +19,9 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 
-rm -rf $PRGNAM
-tar xvf $CWD/$PRGNAM\_$VERSION.tar.gz
-cd $PRGNAM
+rm -rf $PRGNAM-$VERSION
+tar xvf $CWD/$PRGNAM-distribution-$VERSION.tar.gz
+cd $PRGNAM-distribution-$VERSION
 chown -R root:root .
 find . \
  \( -perm 777 -o -perm 775 -o -perm 711 -o -perm 555 -o -perm 511 \) \
@@ -30,22 +30,25 @@ find . \
  -exec chmod 644 {} \;
 
 mkdir -p $PKG/opt/$PRGNAM/
-cp -a .install4j/ $PKG/opt/$PRGNAM/
 cp -a bin/ $PKG/opt/$PRGNAM/
-cp -a conf/ $PKG/opt/$PRGNAM/
+cp -a etc/ $PKG/opt/$PRGNAM/
 cp -a lib/ $PKG/opt/$PRGNAM/
 cp -a logs/ $PKG/opt/$PRGNAM/
-cp -a plugins/ $PKG/opt/$PRGNAM/
 cp -a resources/ $PKG/opt/$PRGNAM/
+cp -a start.d/ $PKG/opt/$PRGNAM/
+cp -a start.ini $PKG/opt/$PRGNAM/
+cp -a start.jar $PKG/opt/$PRGNAM/
+cp -a webapps/ $PKG/opt/$PRGNAM/
+cp -a webapps.demo/ $PKG/opt/$PRGNAM/
 
 mkdir -p $PKG/etc/rc.d/
-ln -sv ../../opt/$PRGNAM/bin/openfire $PKG/etc/rc.d/rc.openfire
+ln -sv ../../opt/$PRGNAM/bin/jetty.sh $PKG/etc/rc.d/rc.jetty
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | \
  grep ELF | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a *.html documentation/ $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a *.html *.txt $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 find $PKG/usr/doc/$PRGNAM-$VERSION -type f -exec chmod 644 {} \;
 
