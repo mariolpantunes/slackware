@@ -1,12 +1,12 @@
 #!/bin/bash
 #
 # Slackware build script for LevelDB
-# Written by Mário Antunes (mario.antunes@av.it.pt)
+# Written by Mário Antunes (mariolpantunes@gmail.com)
 
-PRGNAM=leveldb
-VERSION=${VERSION:-1.9.0}
-BUILD=${BUILD:-1}
-TAG=${TAG:-_SBo}
+PRGNAM="leveldb"
+VERSION=${VERSION:-$(echo $PRGNAM*.tar.* | rev | cut -f 3- -d '.' | rev | cut -d '-' -f 2-)}
+BUILD=${BUILD:-"1"}
+TAG=${TAG:-"_SBo"}
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -36,7 +36,7 @@ else
 fi
 
 # Build with snappy
-SNAPPY=${SNAPPY:-no}
+SNAPPY=${SNAPPY:-"no"}
 
 set -e
 
