@@ -1,12 +1,12 @@
-#!/bin/sh -e
+#!/bin/bash
 #
-# Slackware build script for Zeromq-jzmq
-# Written by Mário Antunes (mario.antunes@av.it.pt)
+# Slackware build script for Snappy
+# Written by Mário Antunes (mariolpantunes@gmail.com)
 
-PRGNAM=snappy
-VERSION=${VERSION:-1.0.5}
-BUILD=${BUILD:-1}
-TAG=${TAG:-_SBo}
+PRGNAM="snappy"
+VERSION=${VERSION:-$(echo $PRGNAM*.tar.* | rev | cut -f 3- -d '.' | rev | cut -d '-' -f 2-)}
+BUILD=${BUILD:-"1"}
+TAG=${TAG:-"_SBo"}
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
