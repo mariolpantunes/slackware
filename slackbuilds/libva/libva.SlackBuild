@@ -4,7 +4,7 @@
 # Written by Mário Antunes (mariolpantunes@gmail.com)
 
 PRGNAM="libva"
-VERSION=${VERSION:-$(echo $PRGNAM*.tar.bz2 | rev | cut -f 3- -d '.' | rev | cut -d '-' -f 2-)}
+VERSION=${VERSION:-$(echo $PRGNAM*.tar.gz | rev | cut -f 3- -d '.' | rev | cut -d '-' -f 2-)}
 BUILD=${BUILD:-"1"}
 TAG=${TAG:-"_SBo"}
 
@@ -41,7 +41,7 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$BASEVER
-tar -xvf "$CWD/$PRGNAM-$VERSION.tar.bz2"
+tar -xvf "$CWD/$PRGNAM-$VERSION.tar.gz"
 cd "$PRGNAM-$VERSION"
 chown -R root:root .
 find . \
@@ -49,6 +49,8 @@ find . \
  -exec chmod 755 {} \; -o \
  \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
  -exec chmod 644 {} \;
+
+./autogen.sh
 
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
