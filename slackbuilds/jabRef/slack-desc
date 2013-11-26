@@ -6,14 +6,14 @@
 # customary to leave one space after the ':'.
 
       |-----handy-ruler------------------------------------------------------|
-JabRef: JabRef (Reference Manager)
-JabRef:
-JabRef: JabRef is an open source bibliography reference manager. The native
-JabRef: file format used by JabRef is BibTeX, the standard LaTeX bibliography
-JabRef: format.b JabRef runs on the Java VM (version 1.6 or newer), and 
-JabRef: should work equally well on Windows, Linux and Mac OS X.
-JabRef:
-JabRef:
-JabRef:
-JabRef:
-JabRef:
+jabref: JabRef (Reference Manager)
+Jabref:
+Jabref: JabRef is an open source bibliography reference manager. The native
+Jabref: file format used by JabRef is BibTeX, the standard LaTeX bibliography
+jabref: format. JabRef runs on the Java VM (version 1.6 or newer), and 
+jabref: should work equally well on Windows, Linux and Mac OS X.
+jabref:
+jabref:
+jabref:
+jabref:
+jabref:

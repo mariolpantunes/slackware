@@ -1,4 +1,0 @@
-#!/bin/bash
-PWD=$(pwd)
-cd $PWD
-java -jar /opt/JabRef/JabRef-2.9.2.jar "$@"

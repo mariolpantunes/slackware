@@ -75,6 +75,14 @@ function backup_BASH_RC()
     echo -e "\e[00;32mdone.\e[00m"
 }
 
+function backup_ThunderBird()
+{
+    echo -ne "BackUp ThunderBird: "
+    sudo -u $USER mkdir $PKG/$HOMEDIR/.thunderbird/
+    sudo -u $USER cp -Rp $HOMEDIR/.thunderbird/* $PKG/$HOMEDIR/.thunderbird
+    echo -e "\e[00;32mdone.\e[00m"
+}
+
 function backup_NTP()
 {
     echo -ne "BackUp NTP: "
@@ -96,9 +104,10 @@ createHomeDir
 
 ### Call several backup functions
 backup_SSH
-backup_NTP
 backup_VIM
 backup_BASH_RC
+backup_ThunderBird
+backup_NTP
 backup_RC_LOCAL
 
 createPKG
