@@ -16,5 +16,8 @@ EXT="HDMI-0"
 if (xrandr | grep "$EXT disconnected"); then
     xrandr --output $EXT --off --output $IN --auto
 else
-    xrandr --output $IN --pos 0x0 --auto --output $EXT --auto --right-of $IN
+    xrandr --output $EXT --pos 0x0 --auto --output $IN --auto --right-of $EXT
 fi
+
+#Dirty fix
+xfce4-power-manager --restart
