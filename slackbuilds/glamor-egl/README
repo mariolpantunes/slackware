@@ -1,0 +1,2 @@
+The glamor module is an open-source 2D graphics common driver for the X Window System as implemented by X.org.
+It supports a variety of graphics chipsets which have OpenGL/EGL/GBM supports. 
