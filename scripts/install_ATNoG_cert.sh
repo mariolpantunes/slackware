@@ -49,16 +49,29 @@ else
 
     echo "Installing certificate in Curl CA Bundle..."
     if sudo which curl-config > /dev/null; then
-        cat `curl-config --ca` $TMP/$CERT_NAME > /tmp/curl-ca-bundle.crt
+        sudo cat `curl-config --ca` $TMP/$CERT_NAME > /tmp/ca-bundle.crt
         sudo cp `curl-config --ca` `curl-config --ca`.backup
-        sudo cp /tmp/curl-ca-bundle.crt `curl-config --ca`
+        sudo cp $TMP/ca-bundle.crt `curl-config --ca`
         sudo chmod 644 `curl-config --ca`
-        sudo chown root:wheel `curl-config --ca`
+        sudo chown root:root `curl-config --ca`
         echo -e "\e[00;32mInstallion in Curl CA Bundle complete.\e[00m"
     else
         echo -e "\e[00;31mError: command curl-config not found!\e[00m"
         echo -e "\e[00:31mInstallion in Curl CA Bundle aborted.\e[00m"
     fi
+
+    #echo "Installing certificate in SSL CA Bundle..."
+    #if sudo which curl-config > /dev/null; then
+    #    sudo cat /etc/ssl/certs/ca-certificates.crt $TMP/$CERT_NAME > /tmp/ca-bundle.crt
+    #    sudo cp /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt.backup
+    #    sudo cp $TMP/ca-bundle.crt /etc/ssl/certs/ca-certificates.crt
+    #    sudo chmod 644 /etc/ssl/certs/ca-certificates.crt
+    #    sudo chown root:root /etc/ssl/certs/ca-certificates.crt
+    #    echo -e "\e[00;32mInstallion in SSL CA Bundle complete.\e[00m"
+    #else
+    #    echo -e "\e[00;31mError: command curl-config not found!\e[00m"
+    #    echo -e "\e[00:31mInstallion in SSL CA Bundle aborted.\e[00m"
+    #fi
 fi
 
 #installCertCurlBundle

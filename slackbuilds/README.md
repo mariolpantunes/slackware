@@ -6,6 +6,7 @@ Like most slackwers I submitted my slackbuilds to [slackbuilds.org](http://slack
 But until the slackbuilds are accepted they are available through this repository.
 
 ##Slackbuilds
+1. [apache-cassandra] (http://cassandra.apache.org/)
 1. [cura] (http://daid.github.io/Cura/)
 2. [jabref 2.9.2] (http://jabref.sourceforge.net/)
 3. [jetty 9.0.4] (http://www.eclipse.org/jetty/)
