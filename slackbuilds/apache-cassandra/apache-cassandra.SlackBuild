@@ -1,0 +1,65 @@
+#!/bin/bash
+
+PRGNAM="apache-cassandra"
+VERSION=${VERSION:-$(echo $PRGNAM*z | rev | cut -f 3- -d '.' | rev | cut -d '-' -f 3)}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_SBo}
+ARCH="noarch"
+CWD=$(pwd)
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+set -e
+
+rm -rf $PKG
+mkdir -p $TMP $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-$VERSION
+tar xvf $CWD/$PRGNAM-$VERSION-bin.tar.gz
+cd $PRGNAM-$VERSION
+chown -R root:root .
+find . \
+ \( -perm 777 -o -perm 775 -o -perm 711 -o -perm 555 -o -perm 511 \) \
+ -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
+ -exec chmod 644 {} \;
+
+mkdir -p $PKG/opt/$PRGNAM
+mkdir -p $PKG/var/log/$PRGNAM
+mkdir -p $PKG/etc/{profile.d,rc.d}
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+
+rm -f bin/*.bat
+
+cp -rf bin conf interface lib pylib tools $PKG/opt/$PRGNAM
+cp $CWD/rc.cassandra $PKG/etc/rc.d/rc.cassandra
+
+cp -a CHANGES.txt  LICENSE.txt  NEWS.txt  NOTICE.txt  README.txt \
+  $PKG/usr/doc/$PRGNAM-$VERSION
+cp -rf javadoc $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+cat << EOF > $PKG/etc/profile.d/$PRGNAM.csh
+#!/bin/csh
+setenv CASSANDRA_HOME="/opt/$PRGNAM"
+setenv CASSANDRA_CONF="\$CASSANDRA_HOME/conf"
+setenv CASSANDRA_INCLUDE="\$CASSANDRA_HOME/tools/bin/cassandra.in.sh"
+setenv PATH="\$PATH:\$CASSANDRA_HOME/bin"
+EOF
+
+cat << EOF > $PKG/etc/profile.d/$PRGNAM.sh
+#!/bin/sh
+export CASSANDRA_HOME="/opt/$PRGNAM"
+export CASSANDRA_CONF="\$CASSANDRA_HOME/conf"
+export CASSANDRA_INCLUDE="\$CASSANDRA_HOME/tools/bin/cassandra.in.sh"
+export PATH="\$PATH:\$CASSANDRA_HOME/bin"
+EOF
+
+chmod 0755 $PKG/etc/profile.d/*
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
