@@ -160,4 +160,3 @@ cp -a src/xdemos/$i $PKG/usr/bin ;
 
   cd $PKG
   /sbin/makepkg -l y -c n $TMP/$PKGNAM-$LIBVERS-$ARCH-$BUILD.txz
-
