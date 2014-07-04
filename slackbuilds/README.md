@@ -8,6 +8,7 @@ But until the slackbuilds are accepted they are available through this repositor
 ##Slackbuilds
 1. [apache-cassandra] (http://cassandra.apache.org/)
 1. [cura] (http://daid.github.io/Cura/)
+3. [idea] (http://www.jetbrains.com/idea/)
 2. [jabref 2.10] (http://jabref.sourceforge.net/)
 3. [jetty 9.0.4] (http://www.eclipse.org/jetty/)
 4. [jsonbject 1.0.2] (https://github.com/mariolpantunes/JSONObject)

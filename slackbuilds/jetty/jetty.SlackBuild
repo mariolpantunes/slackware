@@ -39,12 +39,10 @@ cp -a bin demo-base etc lib modules resources start.d \
 
 cat << EOF > $PKG/etc/rc.d/rc.jetty
 #!/bin/sh
-
 export JAVA="/usr/lib64/java/bin/java"
 export JETTY_HOME="/opt/$PRGNAM"
 export JETTY_CONF="\$JETTY_HOME/etc/jetty.conf"
 export JETTY_LOGS="/var/log/$PRGNAM"
-
 /opt/jetty/bin/jetty.sh "\$@"
 EOF
 
