@@ -66,13 +66,9 @@ if /bin/ls $CWD/patches/*.patch 1> /dev/null 2> /dev/null ; then
 fi
 
 if [ ! -r configure ]; then
-    NOCONFIGURE=1 
-    autoreconf || exit 1
+    NOCONFIGURE=1 autoreconf || exit 1
+    NOCONFIGURE=1 ./autogen.sh || exit 1
 fi
-
-# Running autogen to avoid problems if our autotools don't match upstream's:
-NOCONFIGURE=1 \
-    ./autogen.sh
 
 CFLAGS="$SLKCFLAGS" \
     ./configure \
