@@ -7,7 +7,7 @@
 PRGNAM="idea"
 ARCNAM="ideaIC"
 VERSION=${VERSION:-$(echo $ARCNAM*.tar.*z | rev | cut -f 3- -d '.' | rev | cut -f 2 -d '-')}
-BUILD=${BUILD:-"1"}
+BUILD=${BUILD:-"2"}
 TAG=${TAG:-"_SBo"}
 ARCH=${ARCH:-"noarch"}
 CWD=$(pwd)
@@ -36,13 +36,25 @@ setenv PATH \$PATH:\$IDEA_HOME/bin
 EOF
 chmod 755 $PKG/etc/profile.d/*
 
-install -D -m 0644 $CWD/$PRGNAM.desktop \
-  $PKG/usr/share/applications/$PRGNAM.desktop
+mkdir -p $PKG/usr/share/applications
+cat << EOF > $PKG/usr/share/applications/$PRGNAM.desktop
+[Desktop Entry]
+Type=Application
+Exec=$PRGNAM.sh
+Name=IntelliJ IDEA
+GenericName=IntelliJ IDEA
+Comment=IntelliJ IDEA
+Icon=$PRGNAM
+StartupNotify=true
+Categories=Development;
+EOF
+
 install -D -m 0644 $PKG/opt/$PRGNAM/bin/$PRGNAM.png \
   $PKG/usr/share/pixmaps/$PRGNAM.png
 
+# Prevent fsnotifer and fsnotifier64 from being striped
 find $PKG | xargs file | grep -e "executable" -e "shared object" | grep ELF \
-  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+    | grep -v "fsnotifier" | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cd $PKG/opt/$PRGNAM
@@ -50,8 +62,22 @@ mv *.txt license $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install
+cat << EOF > $PKG/install/doinst.sh
+if [ -x /usr/bin/update-desktop-database ]; then
+  /usr/bin/update-desktop-database -q usr/share/applications >/dev/null 2>&1
+fi
+
+if [ -x /usr/bin/update-mime-database ]; then
+  /usr/bin/update-mime-database usr/share/mime >/dev/null 2>&1
+fi
+
+if [ -e usr/share/icons/hicolor/icon-theme.cache ]; then
+  if [ -x /usr/bin/gtk-update-icon-cache ]; then
+    /usr/bin/gtk-update-icon-cache usr/share/icons/hicolor >/dev/null 2>&1
+  fi  
+fi
+EOF
 cat $CWD/slack-desc > $PKG/install/slack-desc
-cat $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-"tgz"}

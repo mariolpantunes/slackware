@@ -6,14 +6,14 @@
 # customary to leave one space after the ':'.
 
     |-----handy-ruler------------------------------------------------------|
-Cura: Cura
-Cura:
-Cura: Cura is developed by Ultimaker to make 3D printing as easy and
-Cura: streamlined as possible. It includes everything you need to prepare a 
-Cura: 3D file for printing and to print it. Cura is fully preconfigured to
-Cura: work on the Ultimaker. Cura comes with a friendly setup program that
-Cura: help you install the latest firmware as well as calibrate your 
-Cura: printer. While it is developed to be used with the Ultimaker 3D 
-Cura: printer, it can be used with other RepRap based designs.
-Cura:
-Cura:
+cura: Cura
+cura:
+cura: Cura is developed by Ultimaker to make 3D printing as easy and
+cura: streamlined as possible. It includes everything you need to prepare a 
+cura: 3D file for printing and to print it. Cura is fully preconfigured to
+cura: work on the Ultimaker. Cura comes with a friendly setup program that
+cura: help you install the latest firmware as well as calibrate your 
+cura: printer. While it is developed to be used with the Ultimaker 3D 
+cura: printer, it can be used with other RepRap based designs.
+cura:
+cura:
