@@ -55,20 +55,14 @@ find . \
     \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
     -exec chmod 644 {} \;
 
-# Apply patches from git (and maybe elsewhere):
-# Patches obtained by:
-#   git checkout origin/8.0
-#   git format-patch 3d657b14b4cab98a2945904823e78cd8950944f4.. # 8.0.3 release
+# Apply patches
 if /bin/ls $CWD/patches/*.patch 1> /dev/null 2> /dev/null ; then
     for patch in $CWD/patches/*.patch ; do
         patch -p1 < $patch || exit 1 ; 
     done
 fi
 
-if [ ! -r configure ]; then
-    NOCONFIGURE=1 autoreconf || exit 1
-    NOCONFIGURE=1 ./autogen.sh || exit 1
-fi
+NOCONFIGURE=1 ./autogen.sh || exit 1
 
 CFLAGS="$SLKCFLAGS" \
     ./configure \
@@ -93,12 +87,8 @@ CFLAGS="$SLKCFLAGS" \
     --enable-shared-glapi \
     --disable-dri3 \
     --disable-llvm-shared-libs \
+    --with-egl-platforms="drm,x11"
     --build=$ARCH-slackware-linux
-
-#--with-egl-platforms=x11,drm 
-# r300 requires llvm
-# Other gallium drivers:
-# galahad,i915,identity,llvmpipe,noop,nv50,nvc0,nvfx,rbug,softpipe,svga,trace
 
 make $NUMJOBS || make || exit 1
 make install DESTDIR=$PKG || exit 1
@@ -129,30 +119,30 @@ for i in glthreads glxcontexts glxdemo glxgears glxgears_fbconfig \
     glxheads glxinfo glxpbdemo glxpixmap ; do
 cp -a src/xdemos/$i $PKG/usr/bin ;
   done
-  )
+)
 
-  # Strip binaries:
-  find $PKG | xargs file | grep -e "executable" -e "shared object" | grep ELF \
-      | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null
+# Strip binaries:
+find $PKG | xargs file | grep -e "executable" -e "shared object" | grep ELF \
+    | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null
 
-  find $PKG/usr/man -type f -exec gzip -9 {} \;
-  for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
+find $PKG/usr/man -type f -exec gzip -9 {} \;
+for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
 
-  # Compress info files, if any:
-  if [ -d $PKG/usr/info ]; then
-      rm -f $PKG/usr/info/dir
-      gzip -9 $PKG/usr/info/*
-  fi
+# Compress info files, if any:
+if [ -d $PKG/usr/info ]; then
+    rm -f $PKG/usr/info/dir
+    gzip -9 $PKG/usr/info/*
+fi
 
-  mkdir -p $PKG/usr/doc/Mesa-$LIBVERS/html
-  cp -a \
-      docs/COPYING* docs/relnotes-$LIBVERS*.html docs/README* docs/GL* \
-      $PKG/usr/doc/Mesa-$LIBVERS
-  cp -a docs/*.html $PKG/usr/doc/Mesa-$LIBVERS/html
-  rm -f $PKG/usr/doc/Mesa-$LIBVERS/html/relnotes*.html
+mkdir -p $PKG/usr/doc/Mesa-$LIBVERS/html
+cp -a \
+    docs/COPYING* docs/relnotes-$LIBVERS*.html docs/README* docs/GL* \
+    $PKG/usr/doc/Mesa-$LIBVERS
+cp -a docs/*.html $PKG/usr/doc/Mesa-$LIBVERS/html
+rm -f $PKG/usr/doc/Mesa-$LIBVERS/html/relnotes*.html
 
-  mkdir -p $PKG/install
-  cat $CWD/slack-desc > $PKG/install/slack-desc
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
 
-  cd $PKG
-  /sbin/makepkg -l y -c n $TMP/$PKGNAM-$LIBVERS-$ARCH-$BUILD.txz
+cd $PKG
+/sbin/makepkg -l y -c n $TMP/$PKGNAM-$LIBVERS-$ARCH-$BUILD.txz
