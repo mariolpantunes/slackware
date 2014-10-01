@@ -41,6 +41,20 @@ mkdir -p $TMP $PKG
 cd $TMP
 rm -rf Mesa-${LIBVERS}
 
+#if [ $LIBVERS = "dev" ]; then
+#    TARNAME="MesaLib-dev"
+#    TARFOLDER="Mesa-dev"
+#    rm -rf $TMP/git
+#    mkdir -p $TMP/git/$TARFOLDER
+#    git clone git://anongit.freedesktop.org/mesa/mesa --branch master --single-branch $TMP/git/$TARFOLDER
+#    cd $TMP/git
+#    rm -rf $TARFOLDER/.git/
+#    tar -jcvf $TARNAME.tar.bz2 $TARFOLDER
+#    mv -vf $TARNAME.tar.bz2 $CWD
+#    cd $TMP
+#    rm -rf $TMP/git/
+#fi
+
 tar xvf $CWD/$LIBNAM-$LIBVERS.tar.?z* || exit 1
 cd Mesa-$LIBVERS
 
@@ -82,12 +96,13 @@ CFLAGS="$SLKCFLAGS" \
     --enable-gbm \
     --enable-glx-tls \
     --disable-static \
+    --enable-gallium-egl \
     --enable-gallium-llvm \
     --enable-gallium-gbm \
     --enable-shared-glapi \
     --disable-dri3 \
     --disable-llvm-shared-libs \
-    --with-egl-platforms="drm,x11"
+    --with-egl-platforms="drm,x11" \
     --build=$ARCH-slackware-linux
 
 make $NUMJOBS || make || exit 1

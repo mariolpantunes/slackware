@@ -20,13 +20,13 @@ if [[ $INSIDE_IT -eq 0 ]]; then
     #ip r add 10.5.0.0/16 via 193.136.92.141 dev eth0  
 fi
 
-IN="LVDS"
-EXT="HDMI-0"
-if (xrandr | grep "$EXT disconnected"); then
-    xrandr --output $EXT --off --output $IN --auto
-else
-    xrandr --output $EXT --pos 0x0 --auto --output $IN --auto --right-of $EXT
-fi
+#IN="LVDS"
+#EXT="HDMI-0"
+#if (xrandr | grep "$EXT disconnected"); then
+#    xrandr --output $EXT --off --output $IN --auto
+#else
+#    xrandr --output $EXT --pos 0x0 --auto --output $IN --auto --right-of $EXT
+#fi
 
 #Dirty fix
-xfce4-power-manager --restart
+#xfce4-power-manager --restart
