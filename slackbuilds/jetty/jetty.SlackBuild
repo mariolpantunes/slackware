@@ -4,7 +4,7 @@
 # Written by Mário Antunes (mariolpantunes@gmail.com)
 
 PRGNAM="jetty"
-VERSION=${VERSION:-$(echo $PRGNAM*.tar.* | rev | cut -f 3- -d '.' | rev | cut -d '-' -f 3-)}
+VERSION=${VERSION:-$(echo $PRGNAM*.tar.*z | rev | cut -f 3- -d '.' | rev | cut -d '-' -f 3-)}
 BUILD=${BUILD:-"1"}
 TAG=${TAG:-"_SBo"}
 ARCH="noarch"
@@ -13,6 +13,12 @@ TMP=${TMP:-"/tmp/SBo"}
 PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-"/tmp"}
 
+if [ "$( uname -m )" = "x86_64" ]; then
+    LIBDIRSUFFIX="64"
+else
+    LIBDIRSUFFIX=""
+fi
+
 set -e
 
 rm -rf $PKG
@@ -20,7 +26,7 @@ mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 
 rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-distribution-$VERSION.tar.gz
+tar xvf $CWD/$PRGNAM-distribution-$VERSION.tar.*z
 cd $PRGNAM-distribution-$VERSION
 chown -R root:root .
 find . \
@@ -39,7 +45,7 @@ cp -a bin demo-base etc lib modules resources start.d \
 
 cat << EOF > $PKG/etc/rc.d/rc.jetty
 #!/bin/sh
-export JAVA="/usr/lib64/java/bin/java"
+export JAVA="/usr/lib$LIBDIRSUFFIX/java/bin/java"
 export JETTY_HOME="/opt/$PRGNAM"
 export JETTY_CONF="\$JETTY_HOME/etc/jetty.conf"
 export JETTY_LOGS="/var/log/$PRGNAM"
@@ -48,7 +54,7 @@ EOF
 
 chmod 0755 $PKG/etc/rc.d/*
 
-cp -a *.html *.txt $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a *.html *.txt *.TXT $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 cat << EOF > $PKG/etc/profile.d/$PRGNAM.csh
