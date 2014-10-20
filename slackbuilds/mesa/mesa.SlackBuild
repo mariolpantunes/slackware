@@ -3,15 +3,15 @@
 PKGNAM="mesa"
 LIBNAM="MesaLib"
 DEMNAM="mesa-demos"
-LIBVERS=${LIBVERS:-$(echo $LIBNAM*z* | rev | cut -f 3- -d '.' | rev | cut -d '-' -f 2)}
-DEMVERS=${DEMVERS:-$(echo $DEMNAM*z* | rev | cut -f 3- -d '.' | rev | cut -d '-' -f 3)}
+LIBVERS=${LIBVERS:-$(echo $LIBNAM*.tar.?z* | rev | cut -f 3- -d '.' | rev | cut -d '-' -f 2)}
+DEMVERS=${DEMVERS:-$(echo $DEMNAM*.tar.?z* | rev | cut -f 3- -d '.' | rev | cut -d '-' -f 3)}
 BUILD=${BUILD:-1}
 CORES=$(cat /proc/cpuinfo | grep "^processor" | wc -l)
 NUMJOBS=${NUMJOBS:-"-j$CORES"}
 
 # Be sure this list is up-to-date:
-DRI_DRIVERS="radeon,swrast"
-GALLIUM_DRIVERS="r600,swrast"
+DRI_DRIVERS="radeon"
+GALLIUM_DRIVERS="r600"
 
 if [ -z "$ARCH" ]; then
     case "$( uname -m )" in
@@ -100,7 +100,6 @@ CFLAGS="$SLKCFLAGS" \
     --enable-gallium-llvm \
     --enable-gallium-gbm \
     --enable-shared-glapi \
-    --disable-dri3 \
     --disable-llvm-shared-libs \
     --with-egl-platforms="drm,x11" \
     --build=$ARCH-slackware-linux

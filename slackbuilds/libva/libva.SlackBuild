@@ -4,7 +4,8 @@
 # Written by Mário Antunes (mariolpantunes@gmail.com)
 
 PRGNAM="libva"
-VERSION=${VERSION:-$(echo $PRGNAM*z | rev | cut -f 3- -d '.' | rev | cut -d '-' -f 2-)}
+VERSION=${VERSION:-$(echo $PRGNAM*.tar.?z* | rev | cut -f 3- -d '.' | rev | cut -d '-' -f 2-)}
+echo -e "$VERSION"
 BUILD=${BUILD:-"1"}
 TAG=${TAG:-"_SBo"}
 
@@ -41,7 +42,7 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$BASEVER
-tar -xvf "$CWD/$PRGNAM-$VERSION.tar.gz"
+tar -xvf $CWD/$PRGNAM-$VERSION.tar.?z*
 cd "$PRGNAM-$VERSION"
 chown -R root:root .
 find . \
@@ -50,12 +51,14 @@ find . \
  \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
  -exec chmod 644 {} \;
 
-./autogen.sh
+if [ ! -r configure ]; then
+    NOCONFIGURE=1 ./autogen.sh
+fi
 
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \
-    --build=$ARCH-slackware-linux \
+  --build=$ARCH-slackware-linux \
   --prefix=/usr \
   --libdir=/usr/lib${LIBDIRSUFFIX} \
   --sysconfdir=/etc \
@@ -63,6 +66,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --mandir=/usr/man \
   --docdir=/usr/doc/$PRGNAM-$VERSION \
   --enable-shared \
+  --disable-wayland \
   --disable-dummy-driver \
   --disable-static \
   
