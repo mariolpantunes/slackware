@@ -2,7 +2,7 @@
 # sleep 3
 setxkbmap -layout pt
 #xbacklight -set 25
-echo 5 | sudo tee /sys/class/backlight/asus_laptop/brightness
+echo 5 | sudo tee /sys/class/backlight/acpi_video0/brightness
 
 # Old openstack
 host "gaia.av.it.pt"

@@ -1,0 +1,57 @@
+#!/bin/bash
+
+PRGNAM="Cura"
+VERSION=${VERSION:-$(echo $PRGNAM*AppImage | rev | cut -f 2- -d '.' | rev | cut -d '-' -f 2)}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_SBo}
+ARCH="x86_64"
+CWD=$(pwd)
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+set -e
+
+rm -rf $PKG
+mkdir -p $TMP $OUTPUT $PKG/opt/$PRGNAM-$VERSION
+install -D -m 0755 $CWD/$PRGNAM-$VERSION.AppImage $PKG/opt/$PRGNAM-$VERSION/$PRGNAM-$VERSION.AppImage
+install -D -m 0644 $CWD/$PRGNAM.png $PKG/usr/share/pixmaps/$PRGNAM.png
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+mkdir -p $PKG/usr/share/applications
+cat << EOF > $PKG/usr/share/applications/$PRGNAM.desktop
+[Desktop Entry]
+Type=Application
+Exec=/opt/$PRGNAM-$VERSION/$PRGNAM-$VERSION.AppImage
+Name=$PRGNAM
+GenericName=$PRGNAM
+Comment=$PRGNAM is 3D printing software.
+Icon=$PRGNAM
+StartupNotify=true
+Categories=Graphics;
+EOF
+
+chmod 0644 $PKG/usr/share/applications/$PRGNAM.desktop
+
+mkdir -p $PKG/install
+cat << EOF > $PKG/install/doinst.sh
+if [ -x /usr/bin/update-desktop-database ]; then
+  /usr/bin/update-desktop-database -q usr/share/applications >/dev/null 2>&1
+fi
+
+if [ -x /usr/bin/update-mime-database ]; then
+  /usr/bin/update-mime-database usr/share/mime >/dev/null 2>&1
+fi
+
+if [ -e usr/share/icons/hicolor/icon-theme.cache ]; then
+  if [ -x /usr/bin/gtk-update-icon-cache ]; then
+    /usr/bin/gtk-update-icon-cache usr/share/icons/hicolor >/dev/null 2>&1
+  fi  
+fi
+EOF
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}

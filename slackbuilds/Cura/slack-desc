@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description. Line
+# up the first '|' above the ':' following the base package name, and the '|' 
+# on the right side marks the last column you can put a character in. You must
+# make exactly 11 lines for the formatting to be correct. It's also customary
+# to leave one space after the ':'.
+
+    |-----handy-ruler------------------------------------------------------|
+Cura: Cura (3D Printing Software)
+Cura:
+Cura: Ultimaker Cura prepares your model for 3D printing. Optimized,
+Cura: expert-tested profiles for 3D printers and materials mean you can
+Cura: start printing reliably in no time. And with industry-standard
+Cura: software integration, you can streamline your workflow for maximum 
+Cura: efficiency.
+Cura:
+Cura:
+Cura:
+Cura:

@@ -6,16 +6,17 @@ Like most slackwers I submitted my slackbuilds to [slackbuilds.org](http://slack
 But until the slackbuilds are accepted they are available through this repository.
 
 ##Slackbuilds
-1. [apache-cassandra] (http://cassandra.apache.org/)
-1. [cura] (http://daid.github.io/Cura/)
-3. [idea] (http://www.jetbrains.com/idea/)
-2. [jabref] (http://jabref.sourceforge.net/)
+1. [barrier] (https://github.com/debauchee/barrier)
+2. [apache-cassandra] (http://cassandra.apache.org/)
+3. [Cura] (https://ultimaker.com/en/products/ultimaker-cura-software)
+4. [gst1-vaapi] (https://github.com/GStreamer/gstreamer-vaapi)
+5. [idea] (http://www.jetbrains.com/idea/)
+6. [jabref] (http://jabref.sourceforge.net/)
 3. [jetty] (http://www.eclipse.org/jetty/)
 4. [jsonbject] (https://github.com/mariolpantunes/JSONObject)
 5. [jzmq] (https://github.com/zeromq/jzmq)
 6. [leveldb] (http://code.google.com/p/leveldb/)
 7. [libva] (http://www.freedesktop.org/wiki/Software/vaapi/)
-8. [libvdpau_va_gl] (https://github.com/i-rinat/libvdpau-va-gl)
 9. [mscgen] (http://www.mcternan.me.uk/mscgen/)
 10. [openfire] (http://www.igniterealtime.org/projects/openfire/)
 11. [rc.cloud] (https://github.com/mariolpantunes/slackware/tree/master/rc.cloud)

@@ -1,0 +1,4 @@
+JetBrains Rider is a new cross-platform .NET IDE based on the IntelliJ platform and ReSharper.
+Supports most .NET project types
+Rider supports .NET Framework, the new cross-platform .NET Core, and Mono based projects.
+This lets you develop a wide array of applications including .NET desktop applications, services and libraries, Unity games, Xamarin apps, ASP.NET and ASP.NET Core web applications.

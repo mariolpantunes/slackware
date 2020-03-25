@@ -18,9 +18,9 @@ set -e
 
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
-cp -a ../../service/service $TMP
-cp -a ../../service/insserv $TMP
-cp -a ../../service/bash_completion.d/ $TMP
+cp -a ../../../service/service $TMP
+cp -a ../../../service/insserv $TMP
+cp -a ../../../service/bash_completion.d/ $TMP
 cd $TMP
 chown -R root:root .
 find . \

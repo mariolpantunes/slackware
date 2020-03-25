@@ -1,0 +1,118 @@
+#!/bin/bash
+#
+# Slackware build script for throttled (Fix Intel CPU Throttling on Linux)
+# Written by Mario Antunes (mariolpantunes@gmail.com)
+
+PRGNAM=throttled
+VERSION=${VERSION:-0.5}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_SBo}
+ARCH=${ARCH:-noarch}
+CWD=$(pwd)
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+set -e
+
+rm -rf $PKG
+mkdir -p $TMP $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-$VERSION
+tar xvf $CWD/$PRGNAM-$VERSION.tar.*z
+cd $PRGNAM-$VERSION
+
+mkdir -p $PKG/opt/$PRGNAM $PKG/etc/$PRGNAM
+install -D -m 0644 requirements.txt lenovo_fix.py mmio.py $PKG/opt/$PRGNAM
+install -D -m 0644 etc/lenovo_fix.conf $PKG/etc/$PRGNAM/$PRGNAM.conf
+cd $PKG/opt/$PRGNAM
+/usr/bin/python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+deactivate
+
+mkdir -p $PKG/etc/rc.d/
+cat << EOF > $PKG/etc/rc.d/rc.$PRGNAM
+#!/bin/bash
+
+export THROTTLED_HOME="/opt/$PRGNAM"
+export PYTHON3="\$THROTTLED_HOME/venv/bin/python3"
+export THROTTLED_CONF="/etc/$PRGNAM/$PRGNAM.conf"
+
+PRG=$PRGNAM
+PID_DIRECTORY=/var/run
+PID_FILE="\$PID_DIRECTORY/\$PRG.pid"
+
+function isRunning() {
+[[ ! -f "\$PID_FILE" ]] && return 1
+PID="\$(<"\$PID_FILE")"
+[[ -z "\$PID" ]] && return 1
+[[ ! \$(ps -p \$PID | grep \$PID) == "" ]] && RV=0 || RV=1
+return \$RV
+}
+
+function status() {
+isRunning
+STATUS=\$?
+if [[ \$STATUS -eq 0 ]]; then
+  echo -e "Service \$PRG is running"
+else
+  echo -e "Service \$PRG is not running."
+fi
+}
+
+function start() {
+isRunning
+STATUS=\$?
+if [[ \$STATUS -eq 0 ]]; then
+  echo -e "Service \$PRG is running."
+else
+  \$PYTHON3 \$THROTTLED_HOME/lenovo_fix.py --config \$THROTTLED_CONF 1> >(logger -s -t \$(basename \$0)) 2>&1 &
+  echo \$! > \$PID_FILE
+fi
+}
+
+function stop() {
+isRunning
+STATUS=\$?
+if [[ \$STATUS -eq 0 ]]; then
+  PID="\$(<"\$PID_FILE")"
+  kill \$PID
+  rm "\$PID_FILE"
+else
+  echo -e "Service \$PRG is not running."
+fi
+}
+
+case \$1 in 
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    stop
+    sleep 100
+    start
+    ;;
+  status)
+    status
+    ;;
+  *)   	
+    echo "Usage: \$0 {start|stop|restart|status}"
+    exit 1
+    ;;
+esac
+exit 0
+EOF
+chmod 755 $PKG/etc/rc.d/rc.$PRGNAM
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-"tgz"}

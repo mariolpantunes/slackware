@@ -1,0 +1,21 @@
+components:
+  clang_source:
+    branch: release_40
+    dest_dir: clang_source
+    repository: https://github.com/llvm-mirror/clang
+    revision: HEAD
+  common_clang:
+    branch: master
+    dest_dir: common_clang
+    repository: https://github.com/intel/opencl-clang
+    revision: 9b2473dc76bca8e58bf90e859a87f97ed1ca962c
+  llvm_patches:
+    branch: master
+    dest_dir: llvm_patches
+    repository: https://github.com/intel/llvm-patches
+    revision: 7ac2c8a04178cf90365eeba15c63028a26409de0
+  llvm_source:
+    branch: release_40
+    dest_dir: llvm_source
+    repository: https://github.com/llvm-mirror/llvm
+    revision: HEAD

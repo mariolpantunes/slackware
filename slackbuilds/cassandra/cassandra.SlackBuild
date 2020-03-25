@@ -1,0 +1,149 @@
+#!/bin/bash
+
+BINNAM="apache-cassandra"
+PRGNAM="cassandra"
+VERSION=${VERSION:-$(echo $BINNAM*z | rev | cut -f 3- -d '.' | rev | cut -d '-' -f 3)}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_SBo}
+ARCH="noarch"
+CWD=$(pwd)
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+if [ "$( uname -m )" = "x86_64" ]; then
+    LIBDIRSUFFIX="64"
+else
+    LIBDIRSUFFIX=""
+fi
+
+set -e
+
+rm -rf $PKG
+mkdir -p $TMP $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-$VERSION
+tar xvf $CWD/$BINNAM-$VERSION-bin.tar.gz
+mv $BINNAM-$VERSION $PRGNAM-$VERSION
+cd $PRGNAM-$VERSION
+chown -R root:root .
+find . \
+ \( -perm 777 -o -perm 775 -o -perm 711 -o -perm 555 -o -perm 511 \) \
+ -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
+ -exec chmod 644 {} \;
+
+mkdir -p $PKG/opt/$PRGNAM
+mkdir -p $PKG/etc/{profile.d,rc.d}
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+
+rm -f bin/*.bat
+
+cp -rf bin conf interface lib pylib tools $PKG/opt/$PRGNAM
+
+
+cat << EOF > $PKG/etc/rc.d/rc.cassandra
+#!/bin/bash
+
+export JAVA_HOME="/usr/lib$LIBDIRSUFFIX/java"
+export CASSANDRA_HOME="/opt/$PRGNAM"
+export CASSANDRA_CONF="\$CASSANDRA_HOME/conf"
+export CASSANDRA_INCLUDE="\$CASSANDRA_HOME/tools/bin/cassandra.in.sh"
+
+PRG="$PRGNAM"
+PID_DIRECTORY="/var/run"
+PID_FILE="\$PID_DIRECTORY/\$PRG.pid"
+
+function isRunning() {
+[[ ! -f "\$PID_FILE" ]] && return 1
+PID="\$(<"\$PID_FILE")"
+[[ -z "\$PID" ]] && return 1
+[[ ! \$(ps -p \$PID | grep \$PID) == "" ]] && RV=0 || RV=1
+return \$RV
+}
+
+function status() {
+isRunning
+STATUS=\$?
+if [[ \$STATUS -eq 0 ]]; then
+    echo -e "Service \$PRG is running"
+else
+    echo -e "Service \$PRG is not running."
+fi
+}
+
+function start() {
+isRunning
+STATUS=\$?
+if [[ \$STATUS -eq 0 ]]; then
+    echo -e "Service \$PRG is running."
+else
+    \$CASSANDRA_HOME/bin/\$PRG -p \$PID_FILE > /dev/null 2>&1
+fi
+}
+
+function stop() {
+isRunning
+STATUS=\$?
+if [[ \$STATUS -eq 0 ]]; then
+    PID="\$(<"\$PID_FILE")"
+    kill \$PID
+    rm "\$PID_FILE"
+else
+    echo -e "Service \$PRG is not running."
+fi
+}
+
+case \$1 in 
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        stop
+        sleep 1
+        start
+        ;;
+    status)
+        status
+        ;;
+    *)   	
+        echo "Usage: \$0 {start|stop|restart|status}"
+        exit 1
+        ;;
+esac
+
+exit 0
+EOF
+chmod 0755 $PKG/etc/rc.d/*
+
+cp -a *.txt \
+  $PKG/usr/doc/$PRGNAM-$VERSION
+cp -rf javadoc $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+cat << EOF > $PKG/etc/profile.d/$PRGNAM.csh
+#!/bin/csh
+setenv CASSANDRA_HOME="/opt/$PRGNAM"
+setenv CASSANDRA_CONF="\$CASSANDRA_HOME/conf"
+setenv CASSANDRA_INCLUDE="\$CASSANDRA_HOME/tools/bin/cassandra.in.sh"
+setenv PATH="\$PATH:\$CASSANDRA_HOME/bin"
+EOF
+
+cat << EOF > $PKG/etc/profile.d/$PRGNAM.sh
+#!/bin/sh
+export CASSANDRA_HOME="/opt/$PRGNAM"
+export CASSANDRA_CONF="\$CASSANDRA_HOME/conf"
+export CASSANDRA_INCLUDE="\$CASSANDRA_HOME/tools/bin/cassandra.in.sh"
+export PATH="\$PATH:\$CASSANDRA_HOME/bin"
+EOF
+
+chmod 0755 $PKG/etc/profile.d/*
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}

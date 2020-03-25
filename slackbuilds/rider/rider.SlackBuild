@@ -1,0 +1,81 @@
+#!/bin/bash
+#
+# Slackware build script for JetBrains Rider
+# Written by Mario Antunes (mariolpantunes@gmail.com)
+# This script is just a binary repackaging.
+
+PRGNAM=rider
+ARCNAM=JetBrains.Rider
+#VERSION=${VERSION:-2016.3}
+VERSION=${VERSION:-$(echo $ARCNAM*.tar.*z | rev | cut -f 3- -d '.' | rev | cut -f 2 -d '-')}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_SBo}
+ARCH=${ARCH:-noarch}
+CWD=$(pwd)
+TMP=${TMP:-/home/mantunes/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-"/tmp"}
+
+set -e
+
+rm -rf $PKG
+mkdir -p $TMP $PKG/opt/ $OUTPUT
+cd $PKG/opt/
+tar xvf $CWD/$ARCNAM-$VERSION.tar.*z
+mv * $PRGNAM
+
+mkdir -p $PKG/etc/profile.d
+cat << EOF > $PKG/etc/profile.d/$PRGNAM.sh
+#!/bin/sh
+export RIDER_HOME=/opt/$PRGNAM
+export PATH=\$PATH:\$RIDER_HOME/bin
+EOF
+cat << EOF > $PKG/etc/profile.d/$PRGNAM.csh
+#!/bin/csh
+setenv IDEA_HOME /opt/$PRGNAM
+setenv PATH \$PATH:\$RIDER_HOME/bin
+EOF
+chmod 755 $PKG/etc/profile.d/*
+
+mkdir -p $PKG/usr/share/applications
+cat << EOF > $PKG/usr/share/applications/$PRGNAM.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Path=/opt/$PRGNAM
+Exec=$PRGNAM.sh %f
+Name=JetBrains Rider
+GenericName=JetBrains Rider
+Comment=Develop with pleasure!
+Icon=$PRGNAM
+StartupNotify=true
+Categories=Development;IDE;
+Terminal=false
+EOF
+
+install -D -m 0644 $PKG/opt/$PRGNAM/bin/$PRGNAM.png \
+  $PKG/usr/share/pixmaps/$PRGNAM.png
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+mkdir -p $PKG/install
+cat << EOF > $PKG/install/doinst.sh
+if [ -x /usr/bin/update-desktop-database ]; then
+  /usr/bin/update-desktop-database -q usr/share/applications >/dev/null 2>&1
+fi
+
+if [ -x /usr/bin/update-mime-database ]; then
+  /usr/bin/update-mime-database usr/share/mime >/dev/null 2>&1
+fi
+
+if [ -e usr/share/icons/hicolor/icon-theme.cache ]; then
+  if [ -x /usr/bin/gtk-update-icon-cache ]; then
+    /usr/bin/gtk-update-icon-cache usr/share/icons/hicolor >/dev/null 2>&1
+  fi  
+fi
+EOF
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-"tgz"}

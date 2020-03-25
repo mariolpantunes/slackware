@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.
+# Line up the first '|' above the ':' following the base package name, and
+# the '|' on the right side marks the last column you can put a character in.
+# You must make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':' except on otherwise blank lines.
+
+        |-----handy-ruler------------------------------------------------------|
+vscodium: VSCodium (Visual Studio Code)
+vscodium:
+vscodium: VSCodium is a type of tool that combines the simplicity of a code
+vscodium: editor with what developers need for their core edit-build-debug
+vscodium: cycle. It provides comprehensive editing and debugging support,
+vscodium: an extensibility model, and lightweight integration with existing
+vscodium: tools.
+vscodium:
+vscodium:
+vscodium: GitHub URL: https://github.com/VSCodium/vscodium
+vscodium:

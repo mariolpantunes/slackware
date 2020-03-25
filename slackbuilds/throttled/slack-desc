@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.
+# Line up the first '|' above the ':' following the base package name, and
+# the '|' on the right side marks the last column you can put a character in.
+# You must make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':' except on otherwise blank lines.
+
+         |-----handy-ruler------------------------------------------------------|
+throttled: throttled (Intel CPU Throttling on Linux)
+throttled:
+throttled: This tool was originally developed to fix Linux CPU throttling issues
+throttled: affecting Lenovo T480 / T480s / X1C6 as described here.
+throttled:
+throttled: The CPU package power limit (PL1/2) is forced to a value of 44 W 
+throttled: (29 W on battery) and the temperature trip point to 95 'C (85 'C on 
+throttled: battery) by overriding default values in MSR and MCHBAR every 5 
+throttled: seconds (30 on battery) to block the Embedded Controller from resetting
+throttled: these values to default.
+throttled:

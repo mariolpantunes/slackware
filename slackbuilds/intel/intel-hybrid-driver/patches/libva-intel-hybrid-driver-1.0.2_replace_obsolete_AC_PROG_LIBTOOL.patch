@@ -1,0 +1,28 @@
+diff -up intel-hybrid-driver-1.0.2/configure.ac.replace_obsolete_AC_PROG_LIBTOOL intel-hybrid-driver-1.0.2/configure.ac
+--- intel-hybrid-driver-1.0.2/configure.ac.replace_obsolete_AC_PROG_LIBTOOL	2017-07-25 19:12:23.237687822 +0200
++++ intel-hybrid-driver-1.0.2/configure.ac	2017-07-25 19:13:04.651575755 +0200
+@@ -59,8 +59,8 @@ AC_ARG_ENABLE([wayland],
+                     [build with VA/Wayland API support @<:@default=yes@:>@])],
+     [], [enable_wayland="yes"])
+ 
+-AC_DISABLE_STATIC
+-AC_PROG_LIBTOOL
++LT_INIT([disable-static])
++AC_SUBST([LIBTOOL_DEPS])
+ AC_PROG_CC
+ AM_PROG_CC_C_O
+ AC_PROG_CXX
+diff -up intel-hybrid-driver-1.0.2/Makefile.am.replace_obsolete_AC_PROG_LIBTOOL intel-hybrid-driver-1.0.2/Makefile.am
+--- intel-hybrid-driver-1.0.2/Makefile.am.replace_obsolete_AC_PROG_LIBTOOL	2017-07-25 19:12:30.715667586 +0200
++++ intel-hybrid-driver-1.0.2/Makefile.am	2017-07-25 19:13:44.396468204 +0200
+@@ -1,5 +1,10 @@
+ AUTOMAKE_OPTIONS = foreign
+ 
++LIBTOOL_DEPS = @LIBTOOL_DEPS@
++
++libtool: $(LIBTOOL_DEPS)
++	$(SHELL) ./config.status libtool
++
+ SUBDIRS = debian.upstream src
+ 
+ # Extra clean files so that maintainer-clean removes *everything*

@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description. Line
+# up the first '|' above the ':' following the base package name, and the '|' 
+# on the right side marks the last column you can put a character in. You must
+# make exactly 11 lines for the formatting to be correct. It's also customary
+# to leave one space after the ':'.
+
+    |-----handy-ruler------------------------------------------------------|
+noto: Noto (Beautiful and free fonts for all languages)
+noto:
+noto: When text is rendered by a computer, sometimes characters are 
+noto: displayed as “tofu”. They are little boxes to indicate your device
+noto: doesn’t have a font to display the text. Google has been developing 
+noto: a font family called Noto, which aims to support all languages with
+noto: a harmonious look and feel. Noto is Google’s answer to tofu. The name 
+noto: noto is to convey the idea that Google’s goal is to see “no more 
+noto: tofu”. Noto has multiple styles and weights, and is freely available 
+noto: to all.
+noto:

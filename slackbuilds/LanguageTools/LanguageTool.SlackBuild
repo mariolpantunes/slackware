@@ -1,0 +1,115 @@
+#!/bin/bash
+#
+# Slackware build script for LanguageTools  
+# Written by Mario Antunes (mariolpantunes@gmail.com)
+# This script is just a binary repackaging.
+
+PRGNAM="LanguageTool"
+VERSION=${VERSION:-$(echo $PRGNAM-*.zip | rev | cut -f 2- -d '.' | rev | cut -f 2 -d '-')}
+BUILD=${BUILD:-"1"}
+TAG=${TAG:-"_SBo"}
+ARCH=${ARCH:-"noarch"}
+CWD=$(pwd)
+TMP=${TMP:-"/tmp/SBo"}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-"/tmp"}
+
+set -e
+
+echo $VERSION
+
+rm -rf $PKG
+mkdir -p $TMP $PKG/opt/ $OUTPUT
+cd $PKG/opt/
+unzip $CWD/$PRGNAM-$VERSION.zip
+cd $PRGNAM-$VERSION
+chown -R root:root .
+find -L . \
+ \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
+  -o -perm 511 \) -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
+  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+mkdir -p $PKG/etc/profile.d
+cat << EOF > $PKG/etc/profile.d/$PRGNAM.sh
+#!/bin/sh
+export LANGUAGE_TOOLS_HOME=/opt/$PRGNAM-$VERSION
+export PATH=\$PATH:\$LANGUAGE_TOOLS_HOME
+EOF
+cat << EOF > $PKG/etc/profile.d/$PRGNAM.csh
+#!/bin/csh
+setenv LANGUAGE_TOOLS_HOME=/opt/$PRGNAM-$VERSION
+setenv PATH=\$PATH:\$LANGUAGE_TOOLS_HOME
+EOF
+chmod 755 $PKG/etc/profile.d/*
+
+mkdir -p $PKG/usr/bin
+cat << EOF > $PKG/usr/bin/languagetool-cli.sh
+#!/bin/sh
+
+cd \$LANGUAGE_TOOLS_HOME
+java -jar languagetool-commandline.jar
+EOF
+chmod 755 $PKG/usr/bin/languagetool-cli.sh
+
+cat << EOF > $PKG/usr/bin/languagetool-gui.sh
+#!/bin/sh
+
+cd \$LANGUAGE_TOOLS_HOME
+java -jar languagetool.jar
+EOF
+chmod 755 $PKG/usr/bin/languagetool-gui.sh
+
+cat << EOF > $PKG/usr/bin/languagetool-srv.sh
+#!/bin/sh
+
+cd \$LANGUAGE_TOOLS_HOME
+java -jar languagetool-server.jar
+EOF
+chmod 755 $PKG/usr/bin/languagetool-srv.sh
+
+find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
+  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+
+mkdir -p $PKG/usr/share/applications
+cat << EOF > $PKG/usr/share/applications/$PRGNAM.desktop
+[Desktop Entry]
+Type=Application
+Exec=languagetool-gui.sh
+Name=Language Tools
+GenericName=Language Tools
+Comment=Language Tools
+Icon=$PRGNAM
+StartupNotify=true
+Categories=Development;
+EOF
+
+install -D -m 0644 $CWD/$PRGNAM.svg \
+  $PKG/usr/share/pixmaps/$PRGNAM.svg
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cd $PKG/opt/$PRGNAM-$VERSION
+mv *.txt $PKG/usr/doc/$PRGNAM-$VERSION
+mv *.md  $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+mkdir -p $PKG/install
+cat << EOF > $PKG/install/doinst.sh
+if [ -x /usr/bin/update-desktop-database ]; then
+  /usr/bin/update-desktop-database -q usr/share/applications >/dev/null 2>&1
+fi
+
+if [ -x /usr/bin/update-mime-database ]; then
+  /usr/bin/update-mime-database usr/share/mime >/dev/null 2>&1
+fi
+
+if [ -e usr/share/icons/hicolor/icon-theme.cache ]; then
+  if [ -x /usr/bin/gtk-update-icon-cache ]; then
+    /usr/bin/gtk-update-icon-cache usr/share/icons/hicolor >/dev/null 2>&1
+  fi  
+fi
+EOF
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-"tgz"}
