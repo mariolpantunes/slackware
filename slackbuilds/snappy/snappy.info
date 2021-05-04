@@ -1,8 +1,15 @@
 PRGNAM="snappy"
+<<<<<<< HEAD
 VERSION="1.1.8"
 HOMEPAGE="https://github.com/google/snappy"
 DOWNLOAD="https://github.com/google/snappy/archive/1.1.8.tar.gz"
 MD5SUM="70e48cba7fecf289153d009791c9977f"
+=======
+VERSION="1.0.5"
+HOMEPAGE="http://code.google.com/p/snappy/"
+DOWNLOAD="http://snappy.googlecode.com/files/snappy-1.0.5.tar.gz"
+MD5SUM="4c0af044e654f5983f4acbf00d1ac236"
+>>>>>>> b5f8f8d64400bcaf61a514131d3b1fc747e7a18c
 DOWNLOAD_x86_64=""
 MD5SUM_x86_64=""
 REQUIRES=""

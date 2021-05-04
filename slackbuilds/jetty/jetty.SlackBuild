@@ -51,6 +51,10 @@ export JETTY_CONF="\$JETTY_HOME/etc/jetty.conf"
 export JETTY_LOGS="/var/log/$PRGNAM"
 /opt/jetty/bin/jetty.sh "\$@"
 EOF
+<<<<<<< HEAD
+=======
+
+>>>>>>> b5f8f8d64400bcaf61a514131d3b1fc747e7a18c
 chmod 0755 $PKG/etc/rc.d/*
 
 cp -a *.html *.txt *.TXT $PKG/usr/doc/$PRGNAM-$VERSION

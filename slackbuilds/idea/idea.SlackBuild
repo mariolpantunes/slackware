@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+<<<<<<< HEAD
 # Slackware build script for IntelliJ IDEA
 # Written by Mario Antunes (mariolpantunes@gmail.com)
 # This script is just a binary repackaging.
@@ -15,26 +16,52 @@ CWD=$(pwd)
 TMP=${TMP:-/home/mantunes/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-"/home/mantunes/tmp"}
+=======
+# Slackware build script for IntelliJIDEA
+# Written by Mario Antunes (mariolpantunes@gmail.com)
+# This script is just a binary repackaging.
+
+PRGNAM="idea"
+ARCNAM="ideaIC"
+VERSION=${VERSION:-$(echo $ARCNAM*.tar.*z | rev | cut -f 3- -d '.' | rev | cut -f 2 -d '-')}
+BUILD=${BUILD:-"2"}
+TAG=${TAG:-"_SBo"}
+ARCH=${ARCH:-"noarch"}
+CWD=$(pwd)
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-"/tmp"}
+>>>>>>> b5f8f8d64400bcaf61a514131d3b1fc747e7a18c
 
 set -e
 
 rm -rf $PKG
 mkdir -p $TMP $PKG/opt/ $OUTPUT
 cd $PKG/opt/
+<<<<<<< HEAD
 tar xvf $CWD/$ARCNAM-$VERSION-no-jdk.tar.*z
+=======
+tar xvf $CWD/$ARCNAM-$VERSION.tar.*z
+>>>>>>> b5f8f8d64400bcaf61a514131d3b1fc747e7a18c
 mv * $PRGNAM
 
 mkdir -p $PKG/etc/profile.d
 cat << EOF > $PKG/etc/profile.d/$PRGNAM.sh
 #!/bin/sh
 export IDEA_HOME=/opt/idea
+<<<<<<< HEAD
 export IDEA_JDK=$JAVA_HOME
+=======
+>>>>>>> b5f8f8d64400bcaf61a514131d3b1fc747e7a18c
 export PATH=\$PATH:\$IDEA_HOME/bin
 EOF
 cat << EOF > $PKG/etc/profile.d/$PRGNAM.csh
 #!/bin/csh
 setenv IDEA_HOME /opt/idea
+<<<<<<< HEAD
 setenv IDEA_JDK $JAVA_HOME
+=======
+>>>>>>> b5f8f8d64400bcaf61a514131d3b1fc747e7a18c
 setenv PATH \$PATH:\$IDEA_HOME/bin
 EOF
 chmod 755 $PKG/etc/profile.d/*
@@ -42,6 +69,7 @@ chmod 755 $PKG/etc/profile.d/*
 mkdir -p $PKG/usr/share/applications
 cat << EOF > $PKG/usr/share/applications/$PRGNAM.desktop
 [Desktop Entry]
+<<<<<<< HEAD
 Version=1.0
 Type=Application
 Path=/opt/$PRGNAM
@@ -54,12 +82,32 @@ StartupNotify=true
 Categories=Development;IDE;
 Terminal=false
 StartupWMClass=jetbrains-idea-ce
+=======
+Type=Application
+Exec=$PRGNAM.sh
+Name=IntelliJ IDEA
+GenericName=IntelliJ IDEA
+Comment=IntelliJ IDEA
+Icon=$PRGNAM
+StartupNotify=true
+Categories=Development;
+>>>>>>> b5f8f8d64400bcaf61a514131d3b1fc747e7a18c
 EOF
 
 install -D -m 0644 $PKG/opt/$PRGNAM/bin/$PRGNAM.png \
   $PKG/usr/share/pixmaps/$PRGNAM.png
 
+<<<<<<< HEAD
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+=======
+# Prevent fsnotifer and fsnotifier64 from being striped
+find $PKG | xargs file | grep -e "executable" -e "shared object" | grep ELF \
+    | grep -v "fsnotifier" | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cd $PKG/opt/$PRGNAM
+mv *.txt license $PKG/usr/doc/$PRGNAM-$VERSION
+>>>>>>> b5f8f8d64400bcaf61a514131d3b1fc747e7a18c
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install

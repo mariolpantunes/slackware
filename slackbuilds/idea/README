@@ -9,3 +9,8 @@ available in IntelliJ IDEA Community Edition. JetBrains also builds different
 specific products such as RubyMine, WebStorm, PhpStorm, PyCharm, AppCode and
 MPS, which serve the needs of different developer communities. These 
 products are also built on top of the open source IntelliJ Platform.
+<<<<<<< HEAD
+=======
+
+It requires JDK.
+>>>>>>> b5f8f8d64400bcaf61a514131d3b1fc747e7a18c
