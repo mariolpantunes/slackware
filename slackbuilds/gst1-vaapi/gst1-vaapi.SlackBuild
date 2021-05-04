@@ -49,8 +49,6 @@ tar xvf $CWD/$SRCNAM-$VERSION.tar.?z*
 cd $SRCNAM-$VERSION
 chown -R root:root .
 
-#./autogen.sh
-
 find . \
  \( -perm 777 -o -perm 775 -o -perm 711 -o -perm 555 -o -perm 511 \) \
  -exec chmod 755 {} \; -o \
@@ -59,17 +57,18 @@ find . \
 
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
-  ./configure \
+mkdir meson-build
+cd meson-build
+meson setup \
   --prefix=/usr \
   --libdir=/usr/lib${LIBDIRSUFFIX}/gstreamer-1.0 \
   --mandir=/usr/man \
   --sysconfdir=/etc \
-  --disable-static \
-  --enable-shared \
-  --localstatedir=/var
-
-make
-make install DESTDIR=$PKG
+  --localstatedir=/var \
+  .. || exit 1
+  "${NINJA:=ninja}" $NUMJOBS || exit 1
+  DESTDIR=$PKG $NINJA install || exit 1
+cd ..
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | \
  grep ELF | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=JabRef
+GenericName=JabRef
+Comment=JabRef is an open source bibliography reference manager..
+Exec=/usr/bin/jabref
+Icon=/usr/share/icons/hicolor/1024x1024/apps/jabref.png
+Type=Application
+Categories=Office

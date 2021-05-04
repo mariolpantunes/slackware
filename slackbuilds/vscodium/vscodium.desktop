@@ -2,7 +2,7 @@
 Name=Visual Studio Code
 GenericName=VSCodium
 Comment=VSCodium is a programming IDE.
-Exec=/usr/bin/vscodium
+Exec=/usr/bin/codium
 Icon=/usr/share/icons/hicolor/1024x1024/apps/code.png
 Type=Application
 Categories=Development;Programming

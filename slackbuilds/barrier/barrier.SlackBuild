@@ -4,7 +4,7 @@
 # Written by Mario Antunes (mariolpantunes@gmail.com)
 
 PRGNAM=barrier
-VERSION=${VERSION:-2.3.2}
+VERSION=${VERSION:-2.3.3}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 

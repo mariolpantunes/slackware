@@ -5,13 +5,13 @@
 # This script is just a binary repackaging.
 
 PRGNAM="jabref"
-JARNAM="JabRef"
-VERSION=${VERSION:-4.3.1}
-BUILD=${BUILD:-"1"}
-TAG=${TAG:-"_SBo"}
-ARCH=${ARCH:-"noarch"}
+SRCNAM="JabRef"
+VERSION=${VERSION:-5.1}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_SBo}
+ARCH=${ARCH:-noarch}
 CWD=$(pwd)
-TMP=${TMP:-"/tmp/SBo"}
+TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-/tmp}
 
@@ -19,58 +19,40 @@ set -e
 
 rm -rf $PKG
 mkdir -p $TMP $PKG/opt/$PRGNAM $OUTPUT
-install -D -m 0644 $CWD/$JARNAM-$VERSION.jar $PKG/opt/$PRGNAM/$JARNAM-$VERSION.jar
-install -D -m 0644 $CWD/$PRGNAM.png $PKG/usr/share/pixmaps/$PRGNAM.png
-
-find $PKG | xargs file | grep -e "executable" -e "shared object" | grep ELF \
-  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+cd $TMP
+rm -rf $SRCNAM
+tar xvf $CWD/$SRCNAM-$VERSION-portable_linux.tar.gz
+cd $SRCNAM
+chown -R root:root .
+find -L . \
+ \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
+  -o -perm 511 \) -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
+  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
-mkdir -p $PKG/usr/bin/
-cat << EOF > $PKG/usr/bin/$PRGNAM
-#!/bin/bash
-
-PWD=\$(pwd)
-cd \$PWD
-
-java -jar /opt/jabref/$JARNAM-$VERSION.jar "\$@"
-EOF
-chmod 0755 $PKG/usr/bin/$PRGNAM
+mkdir -p $PKG/opt/$PRGNAM $PKG/usr/bin
+mv * $PKG/opt/$PRGNAM
 
 mkdir -p $PKG/usr/share/applications
-cat << EOF > $PKG/usr/share/applications/$PRGNAM.desktop
-[Desktop Entry]
-Type=Application
-Exec=$PRGNAM
-Name=$JARNAM
-GenericName=$JARNAM
-Comment=$JARNAM is an open source bibliography reference manager.
-Icon=$PRGNAM
-StartupNotify=true
-Categories=Office;
-EOF
+cp $CWD/jabref.desktop $PKG/usr/share/applications
 
-chmod 0644 $PKG/usr/share/applications/$PRGNAM.desktop
+mkdir -p $PKG/usr/share/icons/hicolor/1024x1024/apps
+cp $PKG/opt/$PRGNAM/lib/JabRef.png $PKG/usr/share/icons/hicolor/1024x1024/apps/jabref.png
+
+(
+cd $PKG/usr/bin
+ln -s /opt/$PRGNAM/bin/JabRef jabref
+)
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install
-cat << EOF > $PKG/install/doinst.sh
-if [ -x /usr/bin/update-desktop-database ]; then
-  /usr/bin/update-desktop-database -q usr/share/applications >/dev/null 2>&1
-fi
-
-if [ -x /usr/bin/update-mime-database ]; then
-  /usr/bin/update-mime-database usr/share/mime >/dev/null 2>&1
-fi
-
-if [ -e usr/share/icons/hicolor/icon-theme.cache ]; then
-  if [ -x /usr/bin/gtk-update-icon-cache ]; then
-    /usr/bin/gtk-update-icon-cache usr/share/icons/hicolor >/dev/null 2>&1
-  fi  
-fi
-EOF
 cat $CWD/slack-desc > $PKG/install/slack-desc
+cat $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-"tgz"}
