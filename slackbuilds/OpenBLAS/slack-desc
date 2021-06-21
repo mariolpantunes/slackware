@@ -1,5 +1,4 @@
 # HOW TO EDIT THIS FILE:
-<<<<<<< HEAD
 # The "handy ruler" below makes it easier to edit a package description.
 # Line up the first '|' above the ':' following the base package name, and
 # the '|' on the right side marks the last column you can put a character in.
@@ -10,18 +9,6 @@
 OpenBLAS: OpenBLAS (BLAS library)
 OpenBLAS:
 OpenBLAS: OpenBLAS is an optimized BLAS library based on
-=======
-# The "handy ruler" below makes it easier to edit a package description.  Line
-# up the first '|' above the ':' following the base package name, and the '|'
-# on the right side marks the last column you can put a character in.  You must
-# make exactly 11 lines for the formatting to be correct.  It's also
-# customary to leave one space after the ':'.
-
-        |-----handy-ruler------------------------------------------------------|
-OpenBLAS: OpenBLAS
-OpenBLAS:
-OpenBLAS: OpenBLAS is an optimized BLAS library based on 
->>>>>>> b5f8f8d64400bcaf61a514131d3b1fc747e7a18c
 OpenBLAS: GotoBLAS2 1.13 BSD version.
 OpenBLAS:
 OpenBLAS:
