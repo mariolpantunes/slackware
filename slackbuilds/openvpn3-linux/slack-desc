@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.
+# Line up the first '|' above the ':' following the base package name, and
+# the '|' on the right side marks the last column you can put a character in.
+# You must make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':' except on otherwise blank lines.
+
+        |-----handy-ruler------------------------------------------------------|
+openvpn3-linux: openvpn3-linux
+openvpn3-linux:
+openvpn3-linux: This is the next generation OpenVPN client for Linux. This 
+openvpn3-linux: project is very different from the more classic OpenVPN 2.x 
+openvpn3-linux: versions. First, this is currently only a pure client-only 
+openvpn3-linux: implementation.
+openvpn3-linux:
+openvpn3-linux:
+openvpn3-linux:
+openvpn3-linux:
+openvpn3-linux:

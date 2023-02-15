@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description. Line
+# up the first '|' above the ':' following the base package name, and the '|' 
+# on the right side marks the last column you can put a character in. You must
+# make exactly 11 lines for the formatting to be correct. It's also customary
+# to leave one space after the ':'.
+
+       |-----handy-ruler------------------------------------------------------|
+pteid: PTEID (autenticacao.gov)
+pteid:
+pteid: The Authenticação.gov computer application allows the citizen to take 
+pteid: advantage of the electronic functionalities of their PT Citizen's Card,
+pteid: such as:
+pteid:
+pteid: Signing digital documents with Citizen Card or Mobile Digital Key
+pteid: Change the Citizen's Card PIN codes
+pteid: View and print the personal data on the Citizen's Card
+pteid:
+pteid:

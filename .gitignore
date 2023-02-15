@@ -1,3 +1,5 @@
+*.rpm
+*.deb
 *.tgz
 *.AppImage
 *.7z

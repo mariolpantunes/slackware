@@ -5,7 +5,7 @@
 
 PRGNAM=vscodium
 SRCNAM=VSCodium
-VERSION=${VERSION:-1.57.1}
+VERSION=${VERSION:-1.74.3.23010}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -39,7 +39,7 @@ mkdir -p $PKG/usr/share/applications
 cp $CWD/vscodium.desktop $PKG/usr/share/applications
 
 mkdir -p $PKG/usr/share/icons/hicolor/1024x1024/apps
-cp $PKG/opt/$PRGNAM/resources/app/resources/linux/code.png $PKG/usr/share/icons/hicolor/1024x1024/apps
+cp $PKG/opt/$PRGNAM/resources/app/resources/linux/code.png $PKG/usr/share/icons/hicolor/1024x1024/apps/codium.png
 
 (
 cd $PKG/usr/bin

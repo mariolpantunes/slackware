@@ -3,12 +3,10 @@
 # Slackware build script for OpenBLAS
 # Written by Mário Antunes (mariolpantunes@gmail.com)
 
-PRGNAM="OpenBLAS"
-VERSION=${VERSION:-0.3.21}
+PRGNAM="openvpn3-linux"
+VERSION=${VERSION:-"v19_beta"}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
-
-PREFIX=${PREFIX:-/usr}
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -17,19 +15,7 @@ if [ -z "$ARCH" ]; then
        *) ARCH=$( uname -m ) ;;
   esac
 fi
-EXTRAPARMS=""
-if [ "x`uname -p|grep QEMU|wc -l`" = "x1" ]; then
-  #we are running in a vm with a QEMU cpu. OpenBLAS does not like this
-  EXTRAPARMS="DYNAMIC_ARCH=1"
-  if [ "x$TARGET" = "x" ]; then
-    echo "the cpu is not recognised by OpenBLAS. specify a target cpu"
-    echo "using variable TARGET=targetname"
-    echo "look at TargetList.txt in the source for valid TARGET types."
-    exit 2
-  else
-    EXTRAPARMS=$EXTRAPARMS" TARGET="$TARGET
-  fi
-fi
+
 CWD=$(pwd)
 TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
@@ -46,9 +32,14 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
+
 rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
+mkdir -p $PRGNAM-$VERSION
 cd $PRGNAM-$VERSION
+
+git clone --branch v19_beta https://github.com/OpenVPN/openvpn3-linux.git .
+#tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
+#cd $PRGNAM-$VERSION
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
@@ -56,24 +47,30 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-make $EXTRAPARMS
-make \
-  $EXTRAPARMS \
-  NO_STATIC=1 \
-  BUILD_RELAPACK=1 \
-  DESTDIR=$PKG \
-  PREFIX=$PREFIX \
-  OPENBLAS_LIBRARY_DIR=$PREFIX/lib$LIBDIRSUFFIX \
-  install
+./bootstrap.sh
+
+CFLAGS="$SLKCFLAGS" \
+CXXFLAGS="$SLKCFLAGS" \
+./configure \
+  --build=$ARCH-slackware-linux \
+  --prefix=/usr \
+  --libdir=/usr/lib${LIBDIRSUFFIX} \
+  --sysconfdir=/etc \
+  --localstatedir=/var \
+  --mandir=/usr/man \
+  --docdir=/usr/doc/$PRGNAM-$VERSION \
+  --disable-unit-tests \
+  --disable-build-test-progs \
+
+make -j8
+make install DESTDIR=$PKG
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
-rmdir $PKG$PREFIX/bin
-
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a \
-  BACKERS.md CONTRIBUTORS.md Changelog.txt LICENSE README.md \
+  CLA.md COPYRIGHT.md README.md \
   $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 

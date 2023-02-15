@@ -1,0 +1,22 @@
+OpenVPN 3 Linux client
+
+This is the next generation OpenVPN client for Linux. 
+This project is very different from the more classic OpenVPN 2.x versions. 
+First, this is currently only a pure client-only implementation.
+
+The biggest change from the classic OpenVPN 2.x generation is that it does 
+not need to be started by a root or otherwise privileged account any more. 
+By default, all users on the system will have access to start and manage 
+their own VPN tunnels. It will also support configuring DNS out-of-the-box.
+
+The same OpenVPN 3 Core library which is used in the OpenVPN Connect 
+clients is also used in this OpenVPN 3 client. This implementation does 
+not support all options OpenVPN 2.x does, but if you have a functional 
+configuration with OpenVPN Connect (typically on Android or iOS devices) 
+it will work with this client. In general OpenVPN 3 supports routed TUN 
+configurations; TAP and bridged setups are unsupported and will not work.
+
+On a more technical level, this client builds on D-Bus and does also 
+ship with a Python 3 module which can also be used to implement your own 
+OpenVPN client front-end. Any language which supports D-Bus bindings can 
+also be used.
