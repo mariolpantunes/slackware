@@ -1,0 +1,40 @@
+diff -ruN openvpn3-linux-a/src/service-autostart/Makefile.am openvpn3-linux-b/src/service-autostart/Makefile.am
+--- openvpn3-linux-a/src/service-autostart/Makefile.am	2023-02-28 14:40:51.800233569 +0000
++++ openvpn3-linux-b/src/service-autostart/Makefile.am	2023-02-28 14:39:40.848507152 +0000
+@@ -7,11 +7,18 @@
+ #
+ #
+ 
++if HAVE_SYSTEMD
++LOG_BACKEND = --journald
++else
++LOG_BACKEND = --syslog
++endif
++
+ %.service : %.service.in Makefile
+ 	$(AM_V_GEN)sed -e 's|\@LIBEXEC_PATH\@|$(pkglibexecdir)|' \
+ 		       -e 's|\@OPENVPN_USERNAME\@|$(OPENVPN_USERNAME)|' \
+ 		       -e 's|\@OPENVPN_STATEDIR\@|$(openvpn3_statedir)|' \
+ 		       -e 's|\@DNS_RESOLVER_CONFIG\@|$(dns_resolver_config)|' \
++		       -e 's|\@LOG_BACKEND\@|$(LOG_BACKEND)|' \
+ 		$< > $@.tmp && mv $@.tmp $@
+ 
+ MAINTAINERCLEANFILES = \
+diff -ruN openvpn3-linux-a/src/service-autostart/net.openvpn.v3.log.service.in openvpn3-linux-b/src/service-autostart/net.openvpn.v3.log.service.in
+--- openvpn3-linux-a/src/service-autostart/net.openvpn.v3.log.service.in	2023-02-28 14:40:51.800233569 +0000
++++ openvpn3-linux-b/src/service-autostart/net.openvpn.v3.log.service.in	2023-02-28 14:21:57.483008924 +0000
+@@ -2,11 +2,11 @@
+ #
+ #  SPDX-License-Identifier: AGPL-3.0-only
+ #
+-#  Copyright (C) 2018 - 2022  OpenVPN Inc <sales@openvpn.net>
+-#  Copyright (C) 2018 - 2022  David Sommerseth <davids@openvpn.net>
++#  Copyright (C) 2018 - 2023  OpenVPN Inc <sales@openvpn.net>
++#  Copyright (C) 2018 - 2023  David Sommerseth <davids@openvpn.net>
+ #
+ 
+ [D-BUS Service]
+ Name=net.openvpn.v3.log
+ User=@OPENVPN_USERNAME@
+-Exec=@LIBEXEC_PATH@/openvpn3-service-logger --service --state-dir "@OPENVPN_STATEDIR@" --log-level 4 --journald
++Exec=@LIBEXEC_PATH@/openvpn3-service-logger --service --state-dir "@OPENVPN_STATEDIR@" --log-level 4 @LOG_BACKEND@

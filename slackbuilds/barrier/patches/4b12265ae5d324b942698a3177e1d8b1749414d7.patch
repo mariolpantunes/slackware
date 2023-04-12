@@ -1,0 +1,32 @@
+From 4b12265ae5d324b942698a3177e1d8b1749414d7 Mon Sep 17 00:00:00 2001
+From: James Le Cuirot <chewi@gentoo.org>
+Date: Tue, 2 Nov 2021 20:59:51 +0000
+Subject: [PATCH] Add missing cstddef includes for NULL
+
+Fixes https://github.com/debauchee/barrier/issues/1366.
+---
+ doc/newsfragments/gcc-11-build.bugfix | 1 +
+ src/lib/base/Event.h                  | 2 ++
+ 2 files changed, 3 insertions(+)
+ create mode 100644 doc/newsfragments/gcc-11-build.bugfix
+
+diff --git a/doc/newsfragments/gcc-11-build.bugfix b/doc/newsfragments/gcc-11-build.bugfix
+new file mode 100644
+index 0000000000..255f53655b
+--- /dev/null
++++ b/doc/newsfragments/gcc-11-build.bugfix
+@@ -0,0 +1 @@
++Fixed build on GCC 11.2 (https://github.com/debauchee/barrier/issues/1366).
+diff --git a/src/lib/base/Event.h b/src/lib/base/Event.h
+index 38a2cf1129..cb00dccbbc 100644
+--- a/src/lib/base/Event.h
++++ b/src/lib/base/Event.h
+@@ -21,6 +21,8 @@
+ #include "common/basic_types.h"
+ #include "common/stdmap.h"
+ 
++#include <cstddef>
++
+ class EventData {
+ public:
+     EventData() { }
