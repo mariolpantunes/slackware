@@ -4,7 +4,7 @@
 # Written by Mário Antunes (mariolpantunes@gmail.com)
 
 PRGNAM="openvpn3-linux"
-VERSION=${VERSION:-"v20"}
+VERSION=${VERSION:-"v21"}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
