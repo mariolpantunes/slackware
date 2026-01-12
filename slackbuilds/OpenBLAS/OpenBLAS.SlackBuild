@@ -1,104 +1,182 @@
-#!/bin/sh
-#
+#!/bin/bash
+
 # Slackware build script for OpenBLAS
-# Written by Mário Antunes (mariolpantunes@gmail.com)
+# Based on the official Slackware script by Patrick J. Volkerding
+# Updated by Mário Antunes (mariolpantunes@gmail.com)
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM="OpenBLAS"
-VERSION=${VERSION:-0.3.29}
+SRCNAM="OpenBLAS"
+VERSION=${VERSION:-0.3.30}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
-PREFIX=${PREFIX:-/usr}
 
+# Automatically determine the architecture we're building on:
 if [ -z "$ARCH" ]; then
-  case "$( uname -m )" in
+  case "$(uname -m)" in
     i?86) ARCH=i586 ;;
-    arm*) ARCH=arm ;;
-       *) ARCH=$( uname -m ) ;;
+    arm*) readelf /usr/bin/file -A | egrep -q "Tag_CPU.*[4,5]" && ARCH=arm || ARCH=armv7hl ;;
+    # Unless $ARCH is already set, use uname -m for all other archs:
+    *) ARCH=$(uname -m) ;;
   esac
-fi
-
-EXTRAPARMS=""
-TARGET=${TARGET:-"GENERIC"}
-
-if [ "x`uname -p|grep QEMU|wc -l`" = "x1" ]; then
-  # we are running in a vm with a QEMU cpu. OpenBLAS does not like this
-  EXTRAPARMS="DYNAMIC_ARCH=1"
-  if [ "x$TARGET" = "x" ]; then
-    echo "the cpu is not recognised by OpenBLAS. specify a target cpu"
-    echo "using variable TARGET=targetname"
-    echo "look at TargetList.txt in the source for valid TARGET types."
-    exit 2
-  else
-    EXTRAPARMS=$EXTRAPARMS" TARGET="$TARGET
-  fi
+  export ARCH
 fi
 
 # If the variable PRINT_PACKAGE_NAME is set, then this script will report what
-# the name of the created package would be, and then exit. This information
-# could be useful to other scripts.
+# the name of the created package would be, and then exit.
 if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
   exit 0
 fi
 
+# Don't include -j for this package automatically.
+NUMJOBS=${NUMJOBS:-"$(expr $(nproc) + 1)"}
+
+# OpenBLAS compile can hang when run massively parallel.
+# If NUMJOBS is passed with -j, cap it at 4 for safety.
+if echo $NUMJOBS | grep -q j ; then
+  NUMJOBS="-j4"
+else
+  NUMJOBS="-j${NUMJOBS}"
+fi
+
+if [ "$ARCH" = "i586" ]; then
+  LIBDIRSUFFIX=""
+  # Use NORTHWOOD CPU target as the default to avoid SSE3 and AVX issues on old hw.
+  # DYNAMIC_ARCH=1 allows selecting a different CPU at runtime.
+  TARGET=${TARGET:-NORTHWOOD}
+elif [ "$ARCH" = "i686" ]; then
+  LIBDIRSUFFIX=""
+  TARGET=${TARGET:-NORTHWOOD}
+elif [ "$ARCH" = "x86_64" ]; then
+  LIBDIRSUFFIX="64"
+  # Use OPTERON CPU target as the default safe baseline.
+  TARGET=${TARGET:-OPTERON}
+else
+  LIBDIRSUFFIX=""
+  # Use GENERIC CPU target as the default:
+  TARGET=${TARGET:-GENERIC}
+fi
+
+PREFIX=${PREFIX:-/usr}
 TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-/tmp}
-
-if [ "$ARCH" = "x86_64" ]; then
-    LIBDIRSUFFIX="64"
-else
-    LIBDIRSUFFIX=""
-fi
 
 set -e
 
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
-cd $PRGNAM-$VERSION
+rm -rf $SRCNAM-$VERSION
+echo "Extracting $CWD/$SRCNAM-$VERSION.tar.gz..."
+tar xvf $CWD/$SRCNAM-$VERSION.tar.gz
+cd $SRCNAM-$VERSION
+
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
-  -o -perm 511 \) -exec chmod 755 {} \; -o \
+  -o -perm 511 \) -exec chmod 755 {} \; \
+ -o \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-make $EXTRAPARMS \
-  DYNAMIC_ARCH=1 \
-  TARGET=$TARGET \
-  NO_STATIC=1 \
-  NO_AFFINITY=1 \
-  BUILD_RELAPACK=1 \
-  DESTDIR=$PKG \
-  PREFIX=$PREFIX \
-  OPENBLAS_LIBRARY_DIR=$PREFIX/lib$LIBDIRSUFFIX
+# Determine the lapack version (derived from CMakeLists.txt logic in official script)
+# We can just rely on the main VERSION usually, but let's be safe if they differ.
+LAPACKMAJ=$(grep 'set(OpenBLAS_MAJOR_VERSION ' CMakeLists.txt  |tr -s '()' ' '  |cut -d' ' -f3)
+LAPACKMIN=$(grep 'set(OpenBLAS_MINOR_VERSION ' CMakeLists.txt  |tr -s '()' ' '  |cut -d' ' -f3)
+LAPACKPAT=$(grep 'set(OpenBLAS_PATCH_VERSION ' CMakeLists.txt  |tr -s '()' ' '  |cut -d' ' -f3)
+LAPACK="${LAPACKMAJ}.${LAPACKMIN}.${LAPACKPAT}"
+
+# Build
 make \
-  $EXTRAPARMS \
-  DYNAMIC_ARCH=1 \
-  TARGET=$TARGET \
-  NO_STATIC=1 \
-  NO_AFFINITY=1 \
-  BUILD_RELAPACK=1 \
-  DESTDIR=$PKG \
+  $NUMJOBS \
   PREFIX=$PREFIX \
   OPENBLAS_LIBRARY_DIR=$PREFIX/lib$LIBDIRSUFFIX \
+  TARGET=$TARGET \
+  DYNAMIC_ARCH=1 \
+  NO_STATIC=1 \
+  USE_THREAD=1 \
+  NUM_THREADS=64 \
+  USE_OPENMP=1 \
+  USE_TLS=1 \
+  NO_LAPACK=0 \
+  BUILD_LAPACK_DEPRECATED=1 \
+  NO_AFFINITY=1 \
+  BUILD_RELAPACK=1
+
+# Install
+make \
+  PREFIX=$PREFIX \
+  OPENBLAS_LIBRARY_DIR=$PREFIX/lib$LIBDIRSUFFIX \
+  TARGET=$TARGET \
+  DYNAMIC_ARCH=1 \
+  NO_STATIC=1 \
+  USE_THREAD=1 \
+  NUM_THREADS=64 \
+  USE_OPENMP=1 \
+  USE_TLS=1 \
+  NO_LAPACK=0 \
+  BUILD_LAPACK_DEPRECATED=1 \
+  BUILD_RELAPACK=1 \
+  NO_AFFINITY=1 \
+  DESTDIR=$PKG \
   install
 
+# Install compatibility symlinks (Essential for R, Octave, etc.):
+cd $PKG/usr/lib$LIBDIRSUFFIX
+
+# The library name might vary slightly (e.g., libopenblas.so.0 or libopenblasp-r0.3.29.so)
+# We find the actual installed shared object to link against.
+LIBNAME=$(ls libopenblas*.so)
+
+# For BLAS:
+ln -sf $LIBNAME libblas.so
+ln -sf $LIBNAME libblas.so.3
+ln -sf $LIBNAME libblas.so.$LAPACK
+ln -sf openblas.pc pkgconfig/blas.pc
+
+# For CBLAS:
+ln -sf $LIBNAME libcblas.so
+ln -sf $LIBNAME libcblas.so.3
+ln -sf $LIBNAME libcblas.so.$LAPACK
+ln -sf openblas.pc pkgconfig/cblas.pc
+
+# For LAPACK:
+ln -sf $LIBNAME liblapack.so
+ln -sf $LIBNAME liblapack.so.3
+ln -sf $LIBNAME liblapack.so.$LAPACK
+ln -sf openblas.pc pkgconfig/lapack.pc
+
+# For LAPACKE:
+ln -sf $LIBNAME liblapacke.so
+ln -sf $LIBNAME liblapacke.so.3
+ln -sf $LIBNAME liblapacke.so.$LAPACK
+ln -sf openblas.pc pkgconfig/lapacke.pc
+
+cd -
+
+# Clean up empty bin directory if it exists
+[ -d $PKG/usr/bin ] && rmdir $PKG/usr/bin
+
+# Strip binaries
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
-rmdir $PKG$PREFIX/bin
-
+# Add documentation
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a \
   BACKERS.md CONTRIBUTORS.md Changelog.txt LICENSE README.md \
   $PKG/usr/doc/$PRGNAM-$VERSION
+
+# Truncate ChangeLog if it exists (prevent massive doc size)
+if [ -r Changelog.txt ]; then
+  cat Changelog.txt | head -n 1000 > $PKG/usr/doc/$PRGNAM-$VERSION/Changelog.txt
+  touch -r Changelog.txt $PKG/usr/doc/$PRGNAM-$VERSION/Changelog.txt
+fi
+
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install

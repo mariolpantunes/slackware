@@ -1,0 +1,153 @@
+#!/bin/bash
+
+# Slackware build script for BLIS
+
+cd $(dirname $0) ; CWD=$(pwd)
+
+PRGNAM="blis"
+SRCNAM="blis"
+VERSION=${VERSION:-2.0}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_SBo}
+PKGTYPE=${PKGTYPE:-tgz}
+
+# Automatically determine the architecture we're building on:
+if [ -z "$ARCH" ]; then
+  case "$(uname -m)" in
+    i?86) ARCH=i586 ;;
+    arm*) readelf /usr/bin/file -A | egrep -q "Tag_CPU.*[4,5]" && ARCH=arm || ARCH=armv7hl ;;
+    # Unless $ARCH is already set, use uname -m for all other archs:
+    *) ARCH=$(uname -m) ;;
+  esac
+  export ARCH
+fi
+
+# If the variable PRINT_PACKAGE_NAME is set, then this script will report what
+# the name of the created package would be, and then exit.
+if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
+  exit 0
+fi
+
+# BLIS build system handles parallelism well, but we default to nproc+1
+NUMJOBS=${NUMJOBS:-"$(expr $(nproc) + 1)"}
+NUMJOBS="-j${NUMJOBS}"
+
+# Configuration targets for BLIS
+# "auto" detects the current CPU, which is bad for redistribution.
+# We select generic families to ensure the package runs on all compatible CPUs.
+if [ "$ARCH" = "i586" ]; then
+  LIBDIRSUFFIX=""
+  # 'x86' is the generic 32-bit target family
+  BLIS_CONFIG="x86"
+elif [ "$ARCH" = "i686" ]; then
+  LIBDIRSUFFIX=""
+  BLIS_CONFIG="x86"
+elif [ "$ARCH" = "x86_64" ]; then
+  LIBDIRSUFFIX="64"
+  # 'amd64' is the generic 64-bit target family (includes SSE2/AVX detection at runtime if supported)
+  # Do not confuse with 'auto' (which might pick 'haswell' or 'zen' specifically)
+  BLIS_CONFIG="amd64"
+else
+  LIBDIRSUFFIX=""
+  BLIS_CONFIG="generic"
+fi
+
+PREFIX=${PREFIX:-/usr}
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+set -e
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $SRCNAM-$VERSION
+echo "Extracting $CWD/$SRCNAM-$VERSION.tar.gz..."
+# Github releases sometimes extract to 'blis-2.0' or 'blis-release-2.0'
+tar xvf $CWD/$SRCNAM-$VERSION.tar.gz
+cd $SRCNAM-$VERSION 2>/dev/null || cd $SRCNAM-release-$VERSION 2>/dev/null || cd $SRCNAM-$VERSION*
+
+chown -R root:root .
+find -L . \
+ \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
+  -o -perm 511 \) -exec chmod 755 {} \; \
+ -o \
+ \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
+  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+# Configure BLIS
+# We enable BLAS and CBLAS layers to make it a drop-in replacement.
+# We use OpenMP for threading (standard for BLAS libraries).
+./configure \
+  --prefix=$PREFIX \
+  --libdir=$PREFIX/lib$LIBDIRSUFFIX \
+  --enable-cblas \
+  --enable-blas \
+  --enable-threading=openmp \
+  --enable-shared \
+  --enable-static \
+  $BLIS_CONFIG
+
+# Build
+make $NUMJOBS
+
+# Install
+make install DESTDIR=$PKG
+
+# Post-install: Create Compatibility Symlinks
+# BLIS provides the BLAS standard ABI if configured with --enable-blas.
+# Note: BLIS does NOT provide LAPACK.
+cd $PKG/usr/lib$LIBDIRSUFFIX
+
+# The shared library is usually named libblis.so.X.Y.Z
+# We link the standard blas names to it.
+LIBNAME=$(ls libblis.so)
+
+# For BLAS
+ln -sf $LIBNAME libblas.so
+ln -sf $LIBNAME libblas.so.3
+# pkg-config for blas
+if [ -d pkgconfig ]; then
+    ln -sf blis.pc pkgconfig/blas.pc
+fi
+
+# For CBLAS
+ln -sf $LIBNAME libcblas.so
+ln -sf $LIBNAME libcblas.so.3
+if [ -d pkgconfig ]; then
+    ln -sf blis.pc pkgconfig/cblas.pc
+fi
+
+cd -
+
+# Clean up
+[ -d $PKG/usr/bin ] && rmdir $PKG/usr/bin 2>/dev/null || true
+
+# Strip binaries
+find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
+  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+
+# Documentation
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+
+# Updated list: Removed 'AUTHORS', added 'CREDITS*'
+# We use wildcards (*) where possible so the script doesn't fail if a file is renamed.
+cp -a \
+  CREDITS* CHANGELOG* LICENSE* README* docs \
+  $PKG/usr/doc/$PRGNAM-$VERSION
+
+# Truncate CHANGELOG if massive (and if it exists)
+if [ -r CHANGELOG ]; then
+  cat CHANGELOG | head -n 1000 > $PKG/usr/doc/$PRGNAM-$VERSION/CHANGELOG
+  touch -r CHANGELOG $PKG/usr/doc/$PRGNAM-$VERSION/CHANGELOG
+fi
+
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE

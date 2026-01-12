@@ -1,0 +1,22 @@
+BLIS (BLAS-like Library Instantiation Software)
+
+BLIS is a portable software framework for instantiating high-performance
+BLAS-like dense linear algebra libraries.
+
+This package builds BLIS with the BLAS and CBLAS compatibility layers enabled.
+It creates symbolic links for libblas.so and libcblas.so, allowing BLIS to
+serve as a transparent replacement for standard BLAS libraries in applications
+like R, Octave, or NumPy (when built against system BLAS).
+
+IMPORTANT:
+BLIS is a BLAS library only. It does NOT contain LAPACK.
+If you replace a package that provided both (like standard Netlib CLAPACK
+or OpenBLAS), ensure you have a separate LAPACK library installed to maintain
+system stability.
+
+Configuration:
+This package is built with:
+--enable-cblas
+--enable-blas
+--enable-threading=openmp
+Target: Generic (amd64 for x86_64, x86 for 32-bit) to ensure portability.
