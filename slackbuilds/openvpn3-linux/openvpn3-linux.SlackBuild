@@ -1,10 +1,10 @@
 #!/bin/sh
 #
 # Slackware build script for OpenBLAS
-# Written by Mário Antunes (mariolpantunes@gmail.com)
+# Written by Mário Antunes (mario.antunes@ua.pt)
 
 PRGNAM="openvpn3-linux"
-VERSION=${VERSION:-"v21"}
+VERSION=${VERSION:-v21}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 

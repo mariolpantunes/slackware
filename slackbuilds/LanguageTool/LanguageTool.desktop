@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=LanguageTool
+Comment=Grammar, Style and Spell Checker
+Exec=languagetool-gui
+Icon=LanguageTool
+Terminal=false
+Type=Application
+Categories=Office;TextTools;

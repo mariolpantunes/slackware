@@ -6,14 +6,14 @@
 # customary to leave one space after the ':' except on otherwise blank lines.
 
         |-----handy-ruler------------------------------------------------------|
-vscodium: VSCodium (Visual Studio Code)
+vscodium: vscodium (Visual Studio Code FOSS Binary Release)
 vscodium:
-vscodium: VSCodium is a type of tool that combines the simplicity of a code
-vscodium: editor with what developers need for their core edit-build-debug
-vscodium: cycle. It provides comprehensive editing and debugging support,
-vscodium: an extensibility model, and lightweight integration with existing
-vscodium: tools.
+vscodium: Free and open source binary release of VSCode without Microsoft's
+vscodium: branding, telemetry and license.
+vscodium:
+vscodium: Homepage: https://vscodium.com/
 vscodium:
 vscodium:
-vscodium: GitHub URL: https://github.com/VSCodium/vscodium
+vscodium:
+vscodium:
 vscodium:

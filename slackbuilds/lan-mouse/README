@@ -1,0 +1,34 @@
+Lan Mouse is a cross-platform mouse and keyboard sharing software
+similar to universal-control on Apple devices. It allows for using
+multiple PCs via a single set of mouse and keyboard (Software KVM switch).
+
+Build & Runtime Dependencies:
+  - rust / cargo (build dependency)
+  - gtk4
+  - libadwaita
+  - libX11, libXtst (standard in Slackware x/ series)
+
+Optional / Recommended Dependencies:
+  - xdg-desktop-portal & libei (for Wayland / X11 input capture portal)
+  - firewalld (optional firewall rules)
+
+Slackware & Systemd-less Operation:
+  Systemd is NOT required. `lan-mouse` can be started directly from your
+  application menu, desktop environment autostart, or terminal:
+    $ lan-mouse          # Starts GUI & daemon
+    $ lan-mouse daemon   # Starts daemon only in CLI mode
+
+X11 Support & Input Capture Note:
+  X11 support (input emulation and capture flags) is explicitly compiled.
+  - Input Emulation (Receiving input on an X11 machine): Fully supported out
+    of the box using XTest.
+  - Input Capture (Sending input from a host machine): On Linux, input capture
+    relies on `libei` via `xdg-desktop-portal` (org.freedesktop.portal.InputCapture).
+    If `xdg-desktop-portal` is not active, `lan-mouse` will display
+    "input capture is disabled". Starting `xdg-desktop-portal` enables input
+    capture capabilities.
+
+Notes:
+  To customize cargo build flags or features, CARGO_BUILD_FLAGS can be
+  passed to the script:
+    CARGO_BUILD_FLAGS="--no-default-features --features=..." ./lan-mouse.SlackBuild

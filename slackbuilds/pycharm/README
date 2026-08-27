@@ -1,6 +1,4 @@
-PyCharm is an Integrated Development Environment (IDE) used for programming in Python.
-It provides code analysis, graphical debugger, integrated unit tester, VCS/DVCS
-integration and supports web development with Django.
-PyCharm is developed by Czech company JetBrains.
-
-It requires JDK.
+PyCharm's smart code editor provides first-class support for Python,
+JavaScript, CoffeeScript, TypeScript, CSS, popular template languages
+and more. Take advantage of language-aware code completion, error
+detection, and on-the-fly code fixes!

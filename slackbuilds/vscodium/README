@@ -1,14 +1,7 @@
-Microsoft's downloads of Visual Studio Code are licensed under
-this not-FLOSS license and contain telemetry/tracking. 
-This repository exists so that you don't have to download+build
-from source. The build scripts in this repository clone
-Microsoft's vscode repository, run the build commands, and 
-upload the resulting binaries to GitHub releases. These
-binaries are licensed under the MIT license.
-Telemetry is disabled.
+Free and open source binary release of VSCode without Microsoft's
+branding, telemetry and license.
 
+If you cannot or do not want to build VSCode from source and you need a
+clean binary then VSCodium is for you.
 
-NOTE:
-This package is a binary repackaging from the official package.
-If you prefer to download from source, use vscode which is also
-available from SBo.
+NOTE: The 32bit release stops at version 1.35.1

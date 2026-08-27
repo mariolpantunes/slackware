@@ -1,0 +1,84 @@
+#!/bin/sh
+#
+# Slackware build script for lapce
+
+PRGNAM=lapce
+SRCNAM=lapce
+VERSION=${VERSION:-0.4.6}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_SBo}
+
+ARCH=x86_64
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+if [ "$ARCH" = "i586" ]; then
+  COMPILER_FLAGS="-O2 -march=i586 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  COMPILER_FLAGS="-O2 -march=i686 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  COMPILER_FLAGS="-O2 -fPIC"
+  LIBDIRSUFFIX="64"
+else
+  COMPILER_FLAGS="-O2"
+  LIBDIRSUFFIX=""
+fi
+
+set -e
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-$VERSION
+tar xvf $CWD/v$VERSION.tar.gz || tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
+cd $PRGNAM-$VERSION
+
+# Extract binary tarball
+mkdir bin-extract
+cd bin-extract
+tar xvf $CWD/$SRCNAM-linux-amd64.tar.gz
+cd ..
+
+chown -R root:root .
+find -L . \
+ \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
+  -o -perm 511 \) -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
+  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+mkdir -p $PKG/opt/$PRGNAM/bin $PKG/usr/bin
+cp bin-extract/Lapce/lapce $PKG/opt/$PRGNAM/bin/
+
+# Create symlink
+(
+cd $PKG/usr/bin
+ln -s /opt/$PRGNAM/bin/lapce lapce
+)
+
+# Install desktop file
+mkdir -p $PKG/usr/share/applications
+# Fix desktop file exec path if needed, usually just 'lapce'
+sed -i 's/^Exec=.*/Exec=lapce %F/' extra/linux/dev.lapce.lapce.desktop
+cp extra/linux/dev.lapce.lapce.desktop $PKG/usr/share/applications/lapce.desktop
+
+# Install icons
+mkdir -p $PKG/usr/share/icons/hicolor/scalable/apps
+cp icons/lapce/lapce_logo.svg $PKG/usr/share/icons/hicolor/scalable/apps/dev.lapce.lapce.svg
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+cat $CWD/README > $PKG/usr/doc/$PRGNAM-$VERSION/README
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+if [ -e $CWD/doinst.sh ]; then
+  cat $CWD/doinst.sh > $PKG/install/doinst.sh
+fi
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}

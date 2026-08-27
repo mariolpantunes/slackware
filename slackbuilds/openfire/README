@@ -1,35 +1,19 @@
-Openfire is a real time collaboration (RTC) server licensed under the Open Source Apache License.
-It uses the only widely adopted open protocol for instant messaging, XMPP (also called Jabber).
-Openfire is incredibly easy to setup and administer, but offers rock-solid security and performance.
+Openfire is a real time collaboration (RTC) server licensed under the
+Open Source Apache License. It uses the only widely adopted open
+protocol for instant messaging, XMPP (also called Jabber). Openfire is
+incredibly easy to setup and administer, but offers rock-solid security
+and performance.
 
 This script repacks the tar.gz into a slackware package.
-It also links /etc/rc.d/rc.openfire to the correct binary.
 
-## Startup
-To have this start upon each boot, add the following lines to /etc/rc.d/rc.local
 
-<<<<<<< HEAD
-  # Start openfire
-  if [ -x /etc/rc.d/rc.openfire ]; then
-    /etc/rc.d/rc.openfire start
-  fi
+Groupname and Username
 
-You will also want to put the following into /etc/rc.d/rc.local_shutdown
-(if that file does not exist, create it and make it executable):
+You must have the 'openfire' group and user to run this script,
+for example:
 
-  # Stop openfire
-  if [ -x /etc/rc.d/rc.openfire ]; then
-    /etc/rc.d/rc.openfire stop
-  fi
-=======
-	# Start openfire
-	if [ -x /etc/rc.d/rc.openfire ]; then
-	   /etc/rc.d/rc.openfire start
-	fi
->>>>>>> b5f8f8d64400bcaf61a514131d3b1fc747e7a18c
+  groupadd -g 265 openfire
+  useradd -u 265 -g 265 -c "Openfire Server" -m openfire
 
-## Setup
-For information about setup see:
-http://www.howtoforge.com/how-to-set-up-an-openfire-instant-messaging-server-on-centos-5.6
-http://www.igniterealtime.org/builds/openfire/docs/latest/documentation/database.html
-http://www.igniterealtime.org/builds/openfire/docs/latest/documentation/install-guide.html
+
+See README.SLACKWARE for more setup details.

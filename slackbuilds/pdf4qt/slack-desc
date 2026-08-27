@@ -1,0 +1,17 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.
+# Line up the first '|' of the name with the left edge of the number
+# lines. and the last '|' with the last column. Gaps between the "|'s
+# are allowed, but the stop-column is 70.
+      |-----handy-ruler------------------------------------------------------|
+pdf4qt: pdf4qt (Open source PDF editor)
+pdf4qt:
+pdf4qt: PDF4QT is a fast and feature rich PDF editor and viewer.
+pdf4qt: It provides many features like PDF editing, page management,
+pdf4qt: text extraction, and more.
+pdf4qt:
+pdf4qt:
+pdf4qt:
+pdf4qt:
+pdf4qt:
+pdf4qt:

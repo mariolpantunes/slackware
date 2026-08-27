@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=PyCharm
+GenericName=Python IDE
+Comment=Python IDE by JetBrains
+Exec=pycharm %f
+Icon=pycharm
+Terminal=false
+Categories=Development;IDE;
+StartupNotify=true
+StartupWMClass=jetbrains-pycharm

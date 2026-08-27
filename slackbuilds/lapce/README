@@ -1,0 +1,5 @@
+Lapce is a lightning-fast and powerful code editor written in Rust.
+
+This script repackages the official binary releases.
+
+Compiling from source is generally not necessary and would require fetching a large number of Rust dependencies via cargo, taking significantly more time and space. The pre-compiled binary provides the same experience out of the box.

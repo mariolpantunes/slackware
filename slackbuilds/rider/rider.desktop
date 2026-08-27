@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Rider
+GenericName=.NET IDE
+Comment=.NET IDE by JetBrains
+Exec=rider %f
+Icon=rider
+Terminal=false
+Categories=Development;IDE;
+StartupNotify=true
+StartupWMClass=jetbrains-rider

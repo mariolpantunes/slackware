@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.  Line
+# up the first '|' above the ':' following the base package name, and the '|'
+# on the right side marks the last column you can write a character in.  You must
+# make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':'.
+
+         |-----handy-ruler------------------------------------------------------|
+lan-mouse: lan-mouse (Software KVM switch for LAN)
+lan-mouse:
+lan-mouse: Lan Mouse is a cross-platform mouse and keyboard sharing
+lan-mouse: tool similar to Universal Control on Apple devices. It
+lan-mouse: allows using multiple PCs with a single mouse and keyboard
+lan-mouse: over a local area network.
+lan-mouse:
+lan-mouse: Features include GTK4 frontend, Wayland (layer-shell/libei)
+lan-mouse: and X11 support, and desktop integration.
+lan-mouse:
+lan-mouse: Homepage: https://github.com/feschber/lan-mouse

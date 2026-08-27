@@ -1,39 +1,46 @@
-# My slackbuilds
+# My SlackBuilds
+
 ## About
 
-The objective of this repository is to store and share my slackbuilds.
-Like most slackwers I submitted my slackbuilds to [slackbuilds.org](http://slackbuilds.org/).
-But until the slackbuilds are accepted they are available through this repository.
+This repository stores and shares my SlackBuild scripts for Slackware Linux.
 
-##Slackbuilds
-<<<<<<< HEAD
-1. [barrier] (https://github.com/debauchee/barrier)
-2. [apache-cassandra] (http://cassandra.apache.org/)
-3. [Cura] (https://ultimaker.com/en/products/ultimaker-cura-software)
-4. [gst1-vaapi] (https://github.com/GStreamer/gstreamer-vaapi)
-5. [idea] (http://www.jetbrains.com/idea/)
-6. [jabref] (http://jabref.sourceforge.net/)
-=======
-1. [apache-cassandra] (http://cassandra.apache.org/)
-1. [cura] (http://daid.github.io/Cura/)
-3. [idea] (http://www.jetbrains.com/idea/)
-2. [jabref] (http://jabref.sourceforge.net/)
->>>>>>> b5f8f8d64400bcaf61a514131d3b1fc747e7a18c
-3. [jetty] (http://www.eclipse.org/jetty/)
-4. [jsonbject] (https://github.com/mariolpantunes/JSONObject)
-5. [jzmq] (https://github.com/zeromq/jzmq)
-6. [leveldb] (http://code.google.com/p/leveldb/)
-7. [libva] (http://www.freedesktop.org/wiki/Software/vaapi/)
-<<<<<<< HEAD
-=======
-8. [libvdpau_va_gl] (https://github.com/i-rinat/libvdpau-va-gl)
->>>>>>> b5f8f8d64400bcaf61a514131d3b1fc747e7a18c
-9. [mscgen] (http://www.mcternan.me.uk/mscgen/)
-10. [openfire] (http://www.igniterealtime.org/projects/openfire/)
-11. [rc.cloud] (https://github.com/mariolpantunes/slackware/tree/master/rc.cloud)
-12. [s2tc] (https://github.com/divVerent/s2tc)
-13. [service] (https://github.com/mariolpantunes/slackware/tree/master/service)
-14. [snappy] (http://code.google.com/p/snappy/)
-15. [xvba-driver] (http://cgit.freedesktop.org/vaapi/xvba-driver/)
-16. [xvba-sdk] (http://developer.amd.com/tools-and-sdks/open-source/)
-17. [zeromq] (http://www.zeromq.org/)
+## Active SlackBuilds
+
+The following scripts are maintained in the repository root:
+
+1. **LanguageTool** - Java-based grammar checker
+2. **apache-cassandra** - Apache Cassandra distributed database (4.1.x series)
+3. **blis** - BLAS-like dense linear algebra libraries
+4. **cassandra** - Custom/legacy Cassandra package (2.1.x series)
+5. **gst1-vaapi** - GStreamer Video Acceleration API plugins
+6. **idea** - IntelliJ IDEA Development IDE
+7. **jzmq** - ZeroMQ Java bindings
+8. **leveldb** - Fast key-value storage library
+9. **libjcat** - Library for reading and writing Jcat files
+10. **mscgen** - Message Sequence Chart generator
+11. **obsidian** - Obsidian cursors theme
+12. **openfire** - XMPP instant messaging server
+13. **openvpn3-linux** - OpenVPN 3 Linux client
+14. **pdf4qt** - PDF editor and viewer
+15. **pycharm** - PyCharm Python IDE
+16. **rider** - Rider .NET IDE
+17. **snappy** - Fast compression library
+18. **vscodium** - Free/Open Source build of VS Code
+19. **zed** - High-performance code editor
+20. **zeromq** - Lightweight messaging kernel library
+
+## Legacy Packages
+
+Packages that have been integrated into the official Slackware distribution are archived in the `legacy/` directory:
+
+1. **OpenBLAS**
+2. **intel-gmmlib**
+3. **jq**
+4. **libva**
+5. **mesa**
+6. **mtr**
+
+## Maintainer
+
+*   **Name**: Mário Antunes
+*   **Email**: mario.antunes@ua.pt

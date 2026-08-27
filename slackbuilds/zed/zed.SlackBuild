@@ -1,0 +1,62 @@
+#!/bin/sh
+#
+# Slackware build script for zed
+
+
+PRGNAM=zed
+SRCNAM=zed
+VERSION=${VERSION:-1.15.0}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_SBo}
+
+ARCH=x86_64
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+set -e
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf zed-src
+mkdir zed-src
+cd zed-src
+tar xvf $CWD/$SRCNAM-linux-x86_64.tar.gz
+chown -R root:root .
+find -L . \
+ \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
+  -o -perm 511 \) -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
+  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+mkdir -p $PKG/opt/$PRGNAM $PKG/usr/bin
+mv zed.app/* $PKG/opt/$PRGNAM
+rmdir zed.app
+
+# Create symlink
+(
+cd $PKG/usr/bin
+ln -s /opt/$PRGNAM/bin/zed zed
+)
+
+# Install desktop file
+mkdir -p $PKG/usr/share/applications
+cp $PKG/opt/$PRGNAM/share/applications/dev.zed.Zed.desktop $PKG/usr/share/applications/zed.desktop
+
+# Install icons
+mkdir -p $PKG/usr/share/icons/hicolor
+cp -a $PKG/opt/$PRGNAM/share/icons/hicolor/* $PKG/usr/share/icons/hicolor/
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+cat $CWD/README > $PKG/usr/doc/$PRGNAM-$VERSION/README
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+cat $CWD/doinst.sh > $PKG/install/doinst.sh
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}

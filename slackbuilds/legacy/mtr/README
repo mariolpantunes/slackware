@@ -1,0 +1,8 @@
+mtr (a network diagnostic tool)
+
+mtr combines the functionality of the 'traceroute' and 'ping' programs
+in a single network diagnostic tool.
+
+As mtr can be built with either a GTK+ or ncurses interface, you
+should check the SlackBuild for build options if you wish to change
+the default. The default is to build both.

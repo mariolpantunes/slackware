@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Slackware build script for Obsidian cursor theme  
-# Written by Mario Antunes (mariolpantunes@gmail.com)
+# Written by Mário Antunes (mario.antunes@ua.pt)
 
 PRGNAM="obsidian"
 VERSION=${VERSION:-1.0}

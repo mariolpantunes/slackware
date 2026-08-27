@@ -1,3 +1,1 @@
-This library allows reading and writing gzip-compressed JSON catalog files, which can be used to store GPG, PKCS-7 and SHA-256 checksums for each file.
-
-This provides equivalent functionality to the catalog files supported in Microsoft Windows.
+libjcat - Library for reading and writing Jcat files

@@ -1,0 +1,6 @@
+PDF4QT is a fast and feature rich PDF editor and viewer.
+It provides many features like PDF editing, page management,
+text extraction, and more.
+
+Dependencies:
+Qt6, OpenSSL, ZLIB, Freetype, OpenJPEG, JPEG, PNG, blend2d, lcms2, TBB.

@@ -1,10 +1,10 @@
 #!/bin/bash
 #
 # Slackware build script for mscgen
-# Written by Mário Antunes (mariolpantunes@gmail.com)
+# Written by Mário Antunes (mario.antunes@ua.pt)
 
 PRGNAM="mscgen"
-VERSION=${VERSION:-$(echo $PRGNAM*.tar.* | rev | cut -f 3- -d '.' | rev | cut -d '-' -f 3-)}
+VERSION=${VERSION:-0.20}
 BUILD=${BUILD:-"1"}
 TAG=${TAG:-"_SBo"}
 

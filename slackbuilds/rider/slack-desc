@@ -6,14 +6,14 @@
 # customary to leave one space after the ':' except on otherwise blank lines.
 
      |-----handy-ruler------------------------------------------------------|
-rider: Rider (cross-platform .NET IDE)
+rider: rider (C# and .NET IDE)
 rider:
-rider: Rider supports .NET Framework, the new cross-platform .NET Core, and 
-rider: Mono based projects. This lets you develop a wide array of 
-rider: applications including .NET desktop applications, services and 
-rider: libraries, Unity games, Xamarin apps, ASP.NET and ASP.NET Core 
-rider: web applications. 
+rider: JetBrains Rider is an all-in-one IDE for developers
+rider: working with the entire .NET technology stack,
+rider: as well as those involved in game development.
+rider: Its robust feature set allows you to develop a wide array of
+rider: applications targeting frameworks like .NET, ASP.NET Core, MAUI,
+rider: or game engines like Unity, Unreal Engine, or Godot.
 rider:
-rider:
-rider:
+rider: Homepage: https://www.jetbrains.com/rider/
 rider:

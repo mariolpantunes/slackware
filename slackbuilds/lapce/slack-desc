@@ -1,0 +1,12 @@
+     |-----handy-ruler------------------------------------------------------|
+lapce: lapce (Lightning-fast and Powerful Code Editor)
+lapce:
+lapce: Lapce is written in pure Rust with a UI in Floem. It is designed
+lapce: with performance in mind to give you the fastest code editing
+lapce: experience. It has remote development built in, uses WASI for
+lapce: plugins, and includes a built-in terminal.
+lapce:
+lapce:
+lapce:
+lapce: GitHub URL: https://github.com/lapce/lapce
+lapce:
