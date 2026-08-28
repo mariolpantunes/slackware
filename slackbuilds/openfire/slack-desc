@@ -8,12 +8,12 @@
         |-----handy-ruler------------------------------------------------------|
 openfire: openfire (XMPP server)
 openfire:
-openfire: Openfire is a real time collaboration (RTC) server licensed under the
-openfire: Open Source Apache License. It uses the only widely adopted open
-openfire: protocol for instant messaging, XMPP (also called Jabber). Openfire
-openfire: is incredibly easy to setup and administer, but offers rock-solid
-openfire: security and performance.
+openfire: Openfire is a real-time collaboration (RTC) server licensed
+openfire: under the Open Source Apache License. It uses the widely
+openfire: adopted open protocol for instant messaging, XMPP (Jabber).
+openfire: Openfire is easy to set up and administer, but offers
+openfire: rock-solid security and performance.
 openfire:
-openfire:
+openfire: Homepage: https://www.igniterealtime.org/projects/openfire/
 openfire:
 openfire:

@@ -5,15 +5,15 @@
 # You must make exactly 11 lines for the formatting to be correct.  It's also
 # customary to leave one space after the ':' except on otherwise blank lines.
 
-        |-----handy-ruler------------------------------------------------------|
-openvpn3-linux: openvpn3-linux
+                |-----handy-ruler------------------------------------------------------|
+openvpn3-linux: openvpn3-linux (OpenVPN 3 Linux client)
 openvpn3-linux:
-openvpn3-linux: This is the next generation OpenVPN client for Linux. This 
-openvpn3-linux: project is very different from the more classic OpenVPN 2.x 
-openvpn3-linux: versions. First, this is currently only a pure client-only 
-openvpn3-linux: implementation.
+openvpn3-linux: This is the next generation OpenVPN client for Linux.
+openvpn3-linux: Unlike classic OpenVPN 2.x, OpenVPN 3 provides a
+openvpn3-linux: multi-process architecture with unprivileged background
+openvpn3-linux: services and modern D-Bus integration.
 openvpn3-linux:
-openvpn3-linux:
+openvpn3-linux: Homepage: https://github.com/OpenVPN/openvpn3-linux
 openvpn3-linux:
 openvpn3-linux:
 openvpn3-linux:

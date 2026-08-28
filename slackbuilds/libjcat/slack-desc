@@ -8,12 +8,12 @@
        |-----handy-ruler------------------------------------------------------|
 libjcat: libjcat (Library for reading and writing Jcat files)
 libjcat:
-libjcat: This library allows reading and writing gzip-compressed JSON catalog
-libjcat: files, which can be used to store GPG, PKCS-7 and SHA-256 checksums
-libjcat: for each file.
+libjcat: This library allows reading and writing gzip-compressed JSON
+libjcat: catalog files, which can be used to store GPG, PKCS-7 and
+libjcat: SHA-256 checksums for each file.
 libjcat:
-libjcat: This provides equivalent functionality to the catalog files supported
-libjcat: in Microsoft Windows.
+libjcat: This provides equivalent functionality to the catalog files
+libjcat: supported in Microsoft Windows.
 libjcat:
-libjcat: https://github.com/hughsie/libjcat
+libjcat: Homepage: https://github.com/hughsie/libjcat
 libjcat:

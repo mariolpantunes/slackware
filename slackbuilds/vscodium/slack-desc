@@ -8,8 +8,8 @@
         |-----handy-ruler------------------------------------------------------|
 vscodium: vscodium (Visual Studio Code FOSS Binary Release)
 vscodium:
-vscodium: Free and open source binary release of VSCode without Microsoft's
-vscodium: branding, telemetry and license.
+vscodium: Free and open-source binary release of VSCode without
+vscodium: Microsoft's branding, telemetry, and proprietary licensing.
 vscodium:
 vscodium: Homepage: https://vscodium.com/
 vscodium:

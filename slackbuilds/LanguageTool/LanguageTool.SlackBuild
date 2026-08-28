@@ -2,8 +2,9 @@
 
 # Slackware build script for LanguageTool
 
-# Copyright 2015-2016  Dimitris Zlatanidis  Orestiada, Greece
+# Copyright 2026 Mário Antunes (mario.antunes@ua.pt)
 # Copyright 2023 Lockywolf
+# Copyright 2015-2016 Dimitris Zlatanidis Orestiada, Greece
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is

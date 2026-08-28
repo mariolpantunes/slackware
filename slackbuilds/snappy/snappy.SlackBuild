@@ -1,13 +1,15 @@
 #!/bin/bash
 #
 # Slackware build script for Snappy
-# Written by Mário Antunes (mario.antunes@ua.pt)
+#
+# Copyright 2026 Mário Antunes (mario.antunes@ua.pt)
+# All rights reserved.
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=snappy
-VERSION=${VERSION:-1.2.1}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-1.2.2}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
 
@@ -19,10 +21,6 @@ if [ -z "$ARCH" ]; then
   esac
 fi
 
-
-# If the variable PRINT_PACKAGE_NAME is set, then this script will report what
-# the name of the created package would be, and then exit. This information
-# could be useful to other scripts.
 if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
   exit 0
@@ -46,6 +44,8 @@ else
   LIBDIRSUFFIX=""
 fi
 
+NUMJOBS=${NUMJOBS:-" -j$(expr $(nproc) + 1) "}
+
 set -e
 
 rm -rf $PKG
@@ -62,8 +62,10 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-# Fix build with gtest installed
-patch -p1 < $CWD/73.patch
+# Fix build with gtest installed if needed
+if [ -f "$CWD/73.patch" ]; then
+  patch -p1 < $CWD/73.patch || true
+fi
 
 mkdir -p build
 cd build
@@ -73,22 +75,21 @@ cmake \
   -DCMAKE_CXX_FLAGS="$SLKCFLAGS" \
   -DCMAKE_BUILD_TYPE="Release" \
   -DCMAKE_INSTALL_PREFIX=/usr \
+  -DCMAKE_INSTALL_LIBDIR="lib$LIBDIRSUFFIX" \
   -DBUILD_SHARED_LIBS=ON \
   -DSNAPPY_BUILD_TESTS=OFF \
   -DSNAPPY_BUILD_BENCHMARKS=OFF \
   ..
 
-make
+make $NUMJOBS
 make install DESTDIR=$PKG
 cd ..
-
-ls -la
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | \
  grep ELF | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a README.md $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a AUTHORS* COPYING* LICENSE* NEWS* README* $PKG/usr/doc/$PRGNAM-$VERSION 2>/dev/null || true
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 find $PKG/usr/doc/$PRGNAM-$VERSION -type f -exec chmod 644 {} \;
 

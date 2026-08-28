@@ -1,12 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.
+# Line up the first '|' above the ':' following the base package name, and
+# the '|' on the right side marks the last column you can put a character in.
+# You must make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':' except on otherwise blank lines.
+
    |-----handy-ruler------------------------------------------------------|
 zed: zed (The fast, collaborative code editor)
 zed:
 zed: Zed is a high-performance, collaborative code editor from the
-zed: creators of Atom and Tree-sitter. It's written in Rust and
+zed: creators of Atom and Tree-sitter. It is written in Rust and
 zed: designed to utilize every CPU core and the GPU to provide a
 zed: smooth and responsive editing experience.
 zed:
+zed: Homepage: https://zed.dev
 zed:
 zed:
-zed: GitHub URL: https://github.com/zed-industries/zed
 zed:

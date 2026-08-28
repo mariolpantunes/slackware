@@ -1,12 +1,14 @@
 #!/bin/bash
 #
 # Slackware build script for openfire
-# Written by Mário Antunes (mario.antunes@ua.pt)
+#
+# Copyright 2026 Mário Antunes (mario.antunes@ua.pt)
+# All rights reserved.
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=openfire
-VERSION=${VERSION:-4.9.0}
+VERSION=${VERSION:-5.1.2}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}

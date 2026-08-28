@@ -2,7 +2,8 @@
 
 # Slackware build script for vscodium
 
-# Copyright 20253 Ferenc Kurucz <ferenc.kurucz.6351@gmail.com>
+# Copyright 2026 Mário Antunes (mario.antunes@ua.pt)
+# Copyright 2023 Ferenc Kurucz <ferenc.kurucz.6351@gmail.com>
 # Copyright 2022-2023 rc-05 <rc_o5@protonmail.com>
 # All rights reserved.
 #
@@ -26,7 +27,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=vscodium
-VERSION=${VERSION:-1.121.03429}
+VERSION=${VERSION:-1.126.04524}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -47,7 +48,7 @@ fi
 # Bail out when building the Slackbuild on non-x86_64 arch.
 if [ "$ARCH" != "x86_64" ]; then
   echo "Unsupported on $ARCH: last version available is 1.35.2"
-  exit -1
+  exit 1
 fi
 
 TMP=${TMP:-/tmp/SBo}

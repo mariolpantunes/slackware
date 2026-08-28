@@ -8,12 +8,12 @@
       |-----handy-ruler------------------------------------------------------|
 zeromq: zeromq (lightweight messaging kernel library)
 zeromq:
-zeromq: Zeromq lightweight messaging kernel is a library which extends the
-zeromq: standard socket interfaces with features traditionally provided by
-zeromq: specialised messaging middleware products. 0MQ sockets provide an
-zeromq: abstraction of asynchronous message queues, multiple messaging
-zeromq: patterns message filtering (subscriptions), seamless access to
-zeromq: multiple transport protocols and more.
+zeromq: The ZeroMQ lightweight messaging kernel is a library which
+zeromq: extends standard socket interfaces with features traditionally
+zeromq: provided by specialised messaging middleware products.
 zeromq:
+zeromq: 0MQ sockets provide asynchronous message queues, multiple
+zeromq: messaging patterns, message filtering, and seamless transport.
 zeromq:
+zeromq: Homepage: https://zeromq.org/
 zeromq:

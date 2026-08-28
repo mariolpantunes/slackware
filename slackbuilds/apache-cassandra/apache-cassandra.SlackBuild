@@ -2,7 +2,7 @@
 # Slackware build script for apache-cassandra
 #
 # Copyright 2010  Manlio Modugno <manliomodugno -# #- gmail-# #- com>
-# Copyright 2014  Mario Antunes
+# Copyright 2014-2026 Mário Antunes (mario.antunes@ua.pt)
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -29,7 +29,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM="apache-cassandra"
-VERSION=${VERSION:-4.1.11}
+VERSION=${VERSION:-4.1.12}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}

@@ -8,12 +8,12 @@
                 |-----handy-ruler------------------------------------------------------|
 apache-cassandra: apache-cassandra (distributed database)
 apache-cassandra:
-apache-cassandra: The Apache Cassandra Project develops a highly scalable
-apache-cassandra: second-generation distributed database, bringing together
-apache-cassandra: Dynamo's fully distributed design and Bigtable's
-apache-cassandra: ColumnFamily-based data model.
+apache-cassandra: The Apache Cassandra Project develops a highly
+apache-cassandra: scalable second-generation distributed database,
+apache-cassandra: bringing together Dynamo's fully distributed design
+apache-cassandra: and Bigtable's ColumnFamily-based data model.
 apache-cassandra:
-apache-cassandra: Homepage: http://cassandra.apache.org/
+apache-cassandra: Homepage: https://cassandra.apache.org/
 apache-cassandra:
 apache-cassandra:
 apache-cassandra:

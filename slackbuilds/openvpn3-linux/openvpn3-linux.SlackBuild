@@ -1,12 +1,17 @@
-#!/bin/sh
+#!/bin/bash
 #
-# Slackware build script for OpenBLAS
-# Written by Mário Antunes (mario.antunes@ua.pt)
+# Slackware build script for openvpn3-linux
+#
+# Copyright 2026 Mário Antunes (mario.antunes@ua.pt)
+# All rights reserved.
+
+cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM="openvpn3-linux"
-VERSION=${VERSION:-v21}
+VERSION=${VERSION:-v27.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
+PKGTYPE=${PKGTYPE:-tgz}
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -16,16 +21,30 @@ if [ -z "$ARCH" ]; then
   esac
 fi
 
-CWD=$(pwd)
+if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
+  exit 0
+fi
+
 TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-/tmp}
 
-if [ "$ARCH" = "x86_64" ]; then
-    LIBDIRSUFFIX="64"
+if [ "$ARCH" = "i586" ]; then
+  SLKCFLAGS="-O2 -march=i586 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2 -fPIC"
+  LIBDIRSUFFIX="64"
 else
-    LIBDIRSUFFIX=""
+  SLKCFLAGS="-O2"
+  LIBDIRSUFFIX=""
 fi
+
+NUMJOBS=${NUMJOBS:-" -j$(expr $(nproc) + 1) "}
 
 set -e
 
@@ -34,12 +53,8 @@ mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 
 rm -rf $PRGNAM-$VERSION
-mkdir -p $PRGNAM-$VERSION
+tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
 cd $PRGNAM-$VERSION
-
-git clone --depth 1 --branch $VERSION https://github.com/OpenVPN/openvpn3-linux.git .
-#tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
-#cd $PRGNAM-$VERSION
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
@@ -47,13 +62,15 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-./bootstrap.sh
+if [ -d "$CWD/patches" ]; then
+  for patch in "$CWD"/patches/*.patch ; do
+    if [ -f "$patch" ]; then
+      patch -p1 --verbose < "$patch" || true
+    fi
+  done
+fi
 
-#if /bin/ls $CWD/patches/*.patch 1> /dev/null 2> /dev/null ; then
-#  for patch in $CWD/patches/*.patch ; do
-#    patch -p1 --verbose < $patch || exit 1 ;
-#  done
-#fi
+./bootstrap.sh
 
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
@@ -66,22 +83,26 @@ CXXFLAGS="$SLKCFLAGS" \
   --mandir=/usr/man \
   --docdir=/usr/doc/$PRGNAM-$VERSION \
   --disable-unit-tests \
-  --disable-build-test-progs \
+  --disable-build-test-progs
 
-make -j8
+make $NUMJOBS
 make install DESTDIR=$PKG
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
+if [ -d $PKG/usr/man ]; then
+  find $PKG/usr/man -type f -exec gzip -9 {} \;
+  for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
+fi
+
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a \
-  CLA.md COPYRIGHT.md README.md \
-  $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a CLA* COPYRIGHT* README* docs* $PKG/usr/doc/$PRGNAM-$VERSION/ 2>/dev/null || true
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+find $PKG/usr/doc/$PRGNAM-$VERSION -type f -exec chmod 644 {} \;
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
-/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE

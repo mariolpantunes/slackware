@@ -8,9 +8,9 @@
        |-----handy-ruler------------------------------------------------------|
 pycharm: pycharm (Python and Django IDE)
 pycharm:
-pycharm: PyCharm's smart code editor provides first-class support for Python,
-pycharm: JavaScript, CoffeeScript, TypeScript, CSS, popular template languages
-pycharm: and more. Take advantage of language-aware code completion, error
+pycharm: PyCharm's smart code editor provides first-class support for
+pycharm: Python, JavaScript, TypeScript, CSS, template languages and
+pycharm: more. Take advantage of language-aware code completion, error
 pycharm: detection, and on-the-fly code fixes!
 pycharm:
 pycharm: Homepage: https://www.jetbrains.com/pycharm/

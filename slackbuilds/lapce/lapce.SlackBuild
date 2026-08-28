@@ -1,33 +1,29 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Slackware build script for lapce
+#
+# Copyright 2026 Mário Antunes (mario.antunes@ua.pt)
+# All rights reserved.
+
+cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=lapce
 SRCNAM=lapce
 VERSION=${VERSION:-0.4.6}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
+PKGTYPE=${PKGTYPE:-tgz}
 
 ARCH=x86_64
 
-CWD=$(pwd)
+if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
+  exit 0
+fi
+
 TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-/tmp}
-
-if [ "$ARCH" = "i586" ]; then
-  COMPILER_FLAGS="-O2 -march=i586 -mtune=i686"
-  LIBDIRSUFFIX=""
-elif [ "$ARCH" = "i686" ]; then
-  COMPILER_FLAGS="-O2 -march=i686 -mtune=i686"
-  LIBDIRSUFFIX=""
-elif [ "$ARCH" = "x86_64" ]; then
-  COMPILER_FLAGS="-O2 -fPIC"
-  LIBDIRSUFFIX="64"
-else
-  COMPILER_FLAGS="-O2"
-  LIBDIRSUFFIX=""
-fi
 
 set -e
 
@@ -62,7 +58,6 @@ ln -s /opt/$PRGNAM/bin/lapce lapce
 
 # Install desktop file
 mkdir -p $PKG/usr/share/applications
-# Fix desktop file exec path if needed, usually just 'lapce'
 sed -i 's/^Exec=.*/Exec=lapce %F/' extra/linux/dev.lapce.lapce.desktop
 cp extra/linux/dev.lapce.lapce.desktop $PKG/usr/share/applications/lapce.desktop
 
@@ -70,9 +65,13 @@ cp extra/linux/dev.lapce.lapce.desktop $PKG/usr/share/applications/lapce.desktop
 mkdir -p $PKG/usr/share/icons/hicolor/scalable/apps
 cp icons/lapce/lapce_logo.svg $PKG/usr/share/icons/hicolor/scalable/apps/dev.lapce.lapce.svg
 
+find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
+  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 cat $CWD/README > $PKG/usr/doc/$PRGNAM-$VERSION/README
+find $PKG/usr/doc/$PRGNAM-$VERSION -type f -exec chmod 644 {} \;
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
@@ -81,4 +80,4 @@ if [ -e $CWD/doinst.sh ]; then
 fi
 
 cd $PKG
-/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE

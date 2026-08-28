@@ -1,12 +1,15 @@
 #!/bin/bash
-
+#
 # Slackware build script for BLIS
+#
+# Copyright 2026 Mário Antunes (mario.antunes@ua.pt)
+# All rights reserved.
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM="blis"
 SRCNAM="blis"
-VERSION=${VERSION:-2.0}
+VERSION=${VERSION:-2.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}

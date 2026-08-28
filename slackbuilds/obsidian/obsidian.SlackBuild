@@ -1,37 +1,45 @@
-#!/bin/sh
+#!/bin/bash
 #
-# Slackware build script for Obsidian cursor theme  
-# Written by Mário Antunes (mario.antunes@ua.pt)
+# Slackware build script for Obsidian cursor theme
+#
+# Copyright 2026 Mário Antunes (mario.antunes@ua.pt)
+# All rights reserved.
+
+cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM="obsidian"
 VERSION=${VERSION:-1.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
+PKGTYPE=${PKGTYPE:-tgz}
 
 ARCH=noarch
+
+if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
+  exit 0
+fi
 
 TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-/tmp}
-CWD=$(pwd)
 
 set -e
 
-rm -fr $TMP/$PRGNAM-$VERSION $PKG
+rm -rf $TMP/$PRGNAM-$VERSION $PKG
 mkdir -p $TMP $PKG $OUTPUT $TMP/$PRGNAM-$VERSION
 cd $TMP/$PRGNAM-$VERSION
-tar xvf $CWD/73135-Obsidian.tar.bz2                                
-chown -R root.root .
-find . -type f -exec chmod 644 {} \;
-find . -type d -exec chmod 755 {} \;
+tar xvf $CWD/73135-Obsidian.tar.bz2
+chown -R root:root .
+find -L . \
+ \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 -o -perm 511 \) \
+  -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
+  -exec chmod 644 {} \;
 
 mkdir -p $PKG/usr/share/icons/Obsidian
-
-cd Obsidian 
-
-cp -a cursors \
-  index.theme \
-  $PKG/usr/share/icons/Obsidian
+cd Obsidian
+cp -a cursors index.theme $PKG/usr/share/icons/Obsidian
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
@@ -49,10 +57,10 @@ fi
 if [ -e usr/share/icons/hicolor/icon-theme.cache ]; then
   if [ -x /usr/bin/gtk-update-icon-cache ]; then
     /usr/bin/gtk-update-icon-cache usr/share/icons/hicolor >/dev/null 2>&1
-  fi  
+  fi
 fi
 EOF
 cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
-/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE

@@ -70,6 +70,8 @@ else
   LIBDIRSUFFIX=""
 fi
 
+NUMJOBS=${NUMJOBS:-" -j$(expr $(nproc) + 1) "}
+
 set -e
 
 rm -rf $PKG
@@ -99,7 +101,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --disable-Werror \
   --build=$ARCH-slackware-linux
 
-make
+make $NUMJOBS
 make install DESTDIR=$PKG
 
 rm -rf $PKG/usr/lib${LIBDIRSUFFIX}/*.la

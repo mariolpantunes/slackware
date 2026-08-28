@@ -13,3 +13,6 @@
 *.tar.?*
 *.?z
 *.AppImage
+__pycache__/
+*.pyc
+*.pyo
