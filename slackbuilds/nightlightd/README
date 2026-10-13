@@ -1,0 +1,27 @@
+nightlightd is a zero-config screen colour temperature daemon for X11,
+a modern alternative to redshift and gammastep. It reads the timezone
+to find the sun, re-applies the gamma ramp after suspend, resolution
+change or monitor hotplug, and refuses to run twice.
+
+Programs:
+  nightlightd       daemon and CLI (nightlightd --daemon, --status)
+  nightlight-tray   tray icon
+  nightlight-panel  settings window (desktop menu entry)
+  nightlight-tui    terminal dashboard
+
+Build dependencies:
+  - rust / cargo (edition 2024: Rust 1.85 or newer)
+  - network access for crates.io at build time
+Runtime dependencies for nightlight-panel (all in stock Slackware):
+  libX11, libXrandr, libXcursor, libXi, libxkbcommon, Mesa (GL).
+
+Options:
+  PANEL=no           skip nightlight-panel (slowest part of the build)
+  CARGO_BUILD_FLAGS  extra flags passed to cargo build
+
+Autostart:
+  The package installs XDG autostart entries in /etc/xdg/autostart for
+  the daemon and the tray icon. Remove the .desktop files, or copy
+  them to ~/.config/autostart with Hidden=true, to disable them.
+  Slackware has no systemd; a user unit is still installed in
+  /usr/lib/systemd/user for systemd users.

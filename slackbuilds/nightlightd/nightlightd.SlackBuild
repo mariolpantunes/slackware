@@ -1,0 +1,143 @@
+#!/bin/bash
+
+# Slackware build script for nightlightd
+
+# Copyright 2026 Mário Antunes (mario.antunes@ua.pt)
+# All rights reserved.
+#
+# Redistribution and use of this script, with or without modification, is
+# permitted provided that the following conditions are met:
+#
+# 1. Redistributions of this script must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
+#  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+#  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO
+#  EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+#  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+#  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+#  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+#  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+#  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+
+cd $(dirname $0) ; CWD=$(pwd)
+
+PRGNAM=nightlightd
+VERSION=${VERSION:-0.3.1}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_SBo}
+PKGTYPE=${PKGTYPE:-tgz}
+
+# The settings panel (nightlight-panel) pulls in the egui/eframe graphics
+# stack and is by far the slowest part of the build. PANEL=no skips it.
+PANEL=${PANEL:-yes}
+
+if [ -z "$ARCH" ]; then
+  case "$( uname -m )" in
+    i?86) ARCH=i586 ;;
+    arm*) ARCH=arm ;;
+       *) ARCH=$( uname -m ) ;;
+  esac
+fi
+
+if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
+  exit 0
+fi
+
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+if [ "$ARCH" = "i586" ]; then
+  SLKCFLAGS="-O2 -march=i586 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2 -fPIC"
+  LIBDIRSUFFIX="64"
+else
+  SLKCFLAGS="-O2"
+  LIBDIRSUFFIX=""
+fi
+
+set -e
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-$VERSION
+tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
+cd $PRGNAM-$VERSION
+chown -R root:root .
+find -L . \
+ \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
+  -o -perm 511 \) -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
+  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+# Crates are fetched from crates.io: keep them out of $HOME.
+export CARGO_HOME="${CARGO_HOME:-$TMP/cargo}"
+export CARGO_TARGET_DIR="$TMP/$PRGNAM-$VERSION/target"
+
+CRATES="-p nightlightd -p nightlight-tray -p nightlight-tui"
+[ "$PANEL" = "yes" ] && CRATES="$CRATES -p nightlight-panel"
+
+cargo build --release --locked $CRATES ${CARGO_BUILD_FLAGS}
+
+mkdir -p $PKG/usr/bin
+install -m 0755 target/release/nightlightd $PKG/usr/bin/nightlightd
+install -m 0755 target/release/nightlight-tray $PKG/usr/bin/nightlight-tray
+install -m 0755 target/release/nightlight-tui $PKG/usr/bin/nightlight-tui
+
+# XDG entries: the tray and the daemon start with the desktop session,
+# the panel is a window you open from the menu.
+mkdir -p $PKG/etc/xdg/autostart $PKG/usr/share/applications
+install -m 0644 dist/nightlight-tray.desktop \
+  $PKG/etc/xdg/autostart/nightlight-tray.desktop
+
+# Slackware has no systemd: start the daemon from the XDG autostart
+# instead of the user unit. The D-Bus name is a single-instance lock, so a
+# second start exits cleanly.
+cat > $PKG/etc/xdg/autostart/nightlightd.desktop <<'DESKTOP'
+[Desktop Entry]
+Type=Application
+Name=nightlightd
+Comment=Screen colour temperature daemon
+Exec=nightlightd --daemon
+Icon=night-light-symbolic
+Terminal=false
+Categories=Utility;
+X-GNOME-Autostart-enabled=true
+DESKTOP
+chmod 644 $PKG/etc/xdg/autostart/nightlightd.desktop
+
+if [ "$PANEL" = "yes" ]; then
+  install -m 0755 target/release/nightlight-panel $PKG/usr/bin/nightlight-panel
+  install -m 0644 dist/nightlight-panel.desktop \
+    $PKG/usr/share/applications/nightlight-panel.desktop
+fi
+
+# The user unit is shipped for systemd users, with the packaged binary path.
+mkdir -p $PKG/usr/lib/systemd/user
+sed 's|%h/.cargo/bin/nightlightd|/usr/bin/nightlightd|' \
+  dist/nightlightd.service > $PKG/usr/lib/systemd/user/nightlightd.service
+chmod 644 $PKG/usr/lib/systemd/user/nightlightd.service
+
+find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" \
+  | grep ELF | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a README.md LICENSE docs/HOW-IT-WORKS.md docs/PRIOR-ART.md \
+  $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+cat $CWD/doinst.sh > $PKG/install/doinst.sh
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE

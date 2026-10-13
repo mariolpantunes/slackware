@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.  Line
+# up the first '|' above the ':' following the base package name, and the '|'
+# on the right side marks the last column you can put a character in.  You must
+# make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':'.
+
+           |-----handy-ruler------------------------------------------------------|
+nightlightd: nightlightd (screen colour temperature daemon for X11)
+nightlightd:
+nightlightd: A zero-config, modern alternative to redshift and
+nightlightd: gammastep.
+nightlightd: It reads the timezone to place the sun, refuses to run
+nightlightd: twice and re-applies the ramp after suspend or hotplug.
+nightlightd:
+nightlightd: Includes a tray icon, a settings panel and a terminal
+nightlightd: dashboard (nightlight-tui).
+nightlightd:
+nightlightd: Homepage: https://github.com/umutdinceryananer/nightlightd

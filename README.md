@@ -20,6 +20,7 @@ Repository for custom SlackBuild scripts, system utilities, and configurations f
 | **[libjcat](slackbuilds/libjcat/)** | `0.2.6` | Library for reading and writing Jcat files | Meson / Ninja | [Website](https://github.com/hughsie/libjcat) |
 | **[mscgen](slackbuilds/mscgen/)** | `0.20` | Message Sequence Chart Generator | Autotools | [Website](http://www.mcternan.me.uk/mscgen/) |
 | **[obsidian](slackbuilds/obsidian/)** | `1.0` | obsidian cursors theme | Source / Script | [Website](http://gnome-look.org/content/show.php/Obsidian+Cursors?content=73135) |
+| **[nightlightd](slackbuilds/nightlightd/)** | `0.3.1` | Screen colour temperature daemon, alternative to redshift | Rust / Cargo | [Website](https://github.com/umutdinceryananer/nightlightd) |
 | **[openfire](slackbuilds/openfire/)** | `5.1.2` | XMPP server | Binary Repackage | [Website](https://www.igniterealtime.org/projects/openfire/) |
 | **[openvpn3-linux](slackbuilds/openvpn3-linux/)** | `v27.1` | OpenVPN 3 Linux client | Autotools | [Website](https://github.com/OpenVPN/openvpn3-linux) |
 | **[pdf4qt](slackbuilds/pdf4qt/)** | `1.6.0.0` | Open source PDF editor | CMake | [Website](https://github.com/JakubMelka/PDF4QT) |
