@@ -9,7 +9,7 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=zed
 SRCNAM=zed
-VERSION=${VERSION:-1.17.2}
+VERSION=${VERSION:-1.24.2}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
@@ -54,10 +54,14 @@ ln -s /opt/$PRGNAM/bin/zed zed
 # Install desktop file
 mkdir -p $PKG/usr/share/applications
 cp $PKG/opt/$PRGNAM/share/applications/dev.zed.Zed.desktop $PKG/usr/share/applications/zed.desktop
+chmod 644 $PKG/usr/share/applications/zed.desktop
 
 # Install icons
 mkdir -p $PKG/usr/share/icons/hicolor
 cp -a $PKG/opt/$PRGNAM/share/icons/hicolor/* $PKG/usr/share/icons/hicolor/
+
+# Shared libraries and Node addons must be executable (sbopkglint 20-arch).
+find $PKG/opt -type f \( -name '*.so' -o -name '*.so.*' -o -name '*.node' \) -exec chmod 755 {} \+
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true

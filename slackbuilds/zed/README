@@ -2,6 +2,6 @@
 
 Zed is a high-performance, collaborative code editor.
 
-This SlackBuild packages the pre-compiled binary from the official release.
-The application will be installed in /opt/zed and symlinked to /usr/bin/zed.
-The icons and .desktop file will also be installed.
+This SlackBuild packages the pre-compiled binary from the official
+release. The application will be installed in /opt/zed and symlinked to
+/usr/bin/zed. The icons and .desktop file will also be installed.
