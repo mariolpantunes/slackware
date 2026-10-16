@@ -133,7 +133,7 @@ class SlackBuildProject:
             return "CMake"
         if "./configure" in c:
             return "Autotools"
-        if "tar xvf" in c and ("/opt/" in c or "repackag" in c.lower()):
+        if ("tar xvf" in c or "tar -x" in c) and ("/opt/" in c or "repackag" in c.lower()):
             return "Binary Repackage"
         if ".jar" in c or "java" in c.lower():
             return "Java / Binary"
